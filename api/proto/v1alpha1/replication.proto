@@ -1,0 +1,216 @@
+syntax = "proto3";
+
+package matrixhub.v1alpha1;
+
+option go_package = "github.com/matrixhub-ai/matrixhub/api/go/v1alpha1;v1alpha1";
+
+import "google/api/annotations.proto";
+import "v1alpha1/utils.proto";
+
+service Replication {
+  // ListReplications lists all replications.
+  rpc ListReplications(ListReplicationsRequest) returns (ListReplicationsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1alpha1/replications"
+    };
+  }
+  // CreateReplication creates a new replication.
+  rpc CreateReplication(CreateReplicationRequest) returns (CreateReplicationResponse) {
+    option (google.api.http) = {
+      post: "/api/v1alpha1/replications"
+      body: "*"
+    };
+  }
+  // UpdateReplication updates a replication.
+  rpc UpdateReplication(UpdateReplicationRequest) returns (UpdateReplicationResponse) {
+    option (google.api.http) = {
+      put: "/api/v1alpha1/replications/{replication_id}"
+      body: "*"
+    };
+  }
+  // DeleteReplication deletes a replication.
+  rpc DeleteReplication(DeleteReplicationRequest) returns (DeleteReplicationResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1alpha1/replications/{replication_id}"
+    };
+  }
+  // CreateReplicationExecution creates a new replication execution.
+  rpc CreateReplicationExecution(CreateReplicationExecutionRequest) returns (CreateReplicationExecutionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1alpha1/replications/{replication_id}/executions"
+    };
+  }
+  // ListReplicationExecutions lists all replication executions.
+  rpc ListReplicationExecutions(ListReplicationExecutionsRequest) returns (ListReplicationExecutionsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1alpha1/replications/{replication_id}/executions"
+    };
+  }
+  // StopReplicationExecution stops a replication execution.
+  rpc StopReplicationExecution(StopReplicationExecutionRequest) returns (StopReplicationExecutionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1alpha1/replications/{replication_id}/executions/{execution_id}/stop"
+    };
+  }
+}
+
+enum ReplicationPolicyType {
+    REPLICATION_POLICY_TYPE_UNSPECIFIED = 0;
+    REPLICATION_POLICY_TYPE_PULL_BASE = 1;
+    REPLICATION_POLICY_TYPE_PUSH_BASE = 2;
+}
+
+enum ResourceType {
+    RESOURCE_TYPE_UNSPECIFIED = 0;
+    RESOURCE_TYPE_MODEL = 1;
+    RESOURCE_TYPE_DATASET = 2;
+    RESOURCE_TYPE_ALL = 3;
+}
+
+message PullBasePolicy {
+  string source_registry_id = 1;
+  string resource_name = 2;
+  ResourceType resource_type = 3;
+  string target_resource_name = 4;
+}
+
+message PushBasePolicy {
+  string resource_name = 1;
+  ResourceType resource_type = 2;
+  string target_registry_id = 3;
+  string target_resource_name = 4;
+}
+
+enum triggerType {
+  TRIGGER_TYPE_UNSPECIFIED = 0;
+  TRIGGER_TYPE_MANUAL = 1;
+  TRIGGER_TYPE_SCHEDULED = 2;
+}
+
+message ReplicationItem {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    ReplicationPolicyType policy_type = 4;
+    triggerType trigger_type = 5;
+    oneof policy {
+      PullBasePolicy pull_base_policy = 6;
+      PushBasePolicy push_base_policy = 7;
+    }
+    // The bandwidth to use for the replication.
+    string bandwidth = 8;
+    bool is_overwrite = 9;
+    bool is_disabled = 10;
+}
+
+message CreateReplicationRequest {
+  string name = 1;
+  string description = 2;
+  ReplicationPolicyType policy_type = 3;
+  triggerType trigger_type = 4;
+  // The policy to use for the replication.
+  // only one of pull_base_policy or push_base_policy should be set.
+  oneof policy {
+    PullBasePolicy pull_base_policy = 5;
+    PushBasePolicy push_base_policy = 6;
+  }
+  // The bandwidth to use for the replication.
+  string bandwidth = 7;
+  bool is_overwrite = 8;
+}
+
+message CreateReplicationResponse {
+  ReplicationItem replication = 1;
+}
+
+
+message UpdateReplicationRequest {
+  int32 replication_id = 1;
+  string name = 2;
+  string description = 3;
+  triggerType trigger_type = 4;
+  // The policy to use for the replication.
+  // only one of pull_base_policy or push_base_policy should be set.
+  oneof policy {
+    PullBasePolicy pull_base_policy = 5;
+    PushBasePolicy push_base_policy = 6;
+  }
+  // The bandwidth to use for the replication.
+  string bandwidth = 7;
+  bool is_overwrite = 8;
+  bool is_disabled = 9;
+}
+
+message UpdateReplicationResponse {
+  ReplicationItem replication = 1;
+}
+
+message DeleteReplicationRequest {
+  int32 replication_id = 1;
+}
+
+message DeleteReplicationResponse {
+  ReplicationItem replication = 1;
+}
+
+message ListReplicationsRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+  string search = 3;
+}
+
+message ListReplicationsResponse {
+  repeated ReplicationItem replications = 1;
+  Pagination pagination = 2;
+}
+
+message CreateReplicationExecutionRequest {
+  int32 replication_id = 1;
+}
+
+message CreateReplicationExecutionResponse {
+  int32 id = 1;
+}
+
+
+enum ReplicationExecutionStatus {
+  REPLICATION_EXECUTION_STATUS_UNSPECIFIED = 0;
+  REPLICATION_EXECUTION_STATUS_RUNNING = 1;
+  REPLICATION_EXECUTION_STATUS_SUCCEEDED = 2;
+  REPLICATION_EXECUTION_STATUS_FAILED = 3;
+  REPLICATION_EXECUTION_STATUS_STOPPED = 4;
+}
+
+message ReplicationExecution {
+  int32 id = 1;
+  int32 replication_id = 2;
+  triggerType trigger_type = 3;
+  ReplicationExecutionStatus status = 4;
+  int64 started_timestamp = 5;
+  int64 completed_timestamp = 6;
+  int64 total_items = 7;
+  int64 successful_items = 8;
+}
+
+
+message ListReplicationExecutionsRequest {
+  int32 replication_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  string search = 4;
+}
+
+
+message ListReplicationExecutionsResponse {
+  repeated ReplicationExecution executions = 1;
+  Pagination pagination = 2;
+}
+
+message StopReplicationExecutionRequest {
+  int32 replication_id = 1;
+  int32 execution_id = 2;
+}
+
+message StopReplicationExecutionResponse {
+  ReplicationExecution execution = 1;
+}
