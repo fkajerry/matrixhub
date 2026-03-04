@@ -26,6 +26,7 @@ type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	RememberMe    bool                   `protobuf:"varint,3,opt,name=remember_me,json=rememberMe,proto3" json:"remember_me,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -72,6 +73,13 @@ func (x *LoginRequest) GetPassword() string {
 		return x.Password
 	}
 	return ""
+}
+
+func (x *LoginRequest) GetRememberMe() bool {
+	if x != nil {
+		return x.RememberMe
+	}
+	return false
 }
 
 type LoginResponse struct {
@@ -186,10 +194,12 @@ var File_v1alpha1_login_proto protoreflect.FileDescriptor
 
 const file_v1alpha1_login_proto_rawDesc = "" +
 	"\n" +
-	"\x14v1alpha1/login.proto\x12\x12matrixhub.v1alpha1\x1a\x1cgoogle/api/annotations.proto\"F\n" +
+	"\x14v1alpha1/login.proto\x12\x12matrixhub.v1alpha1\x1a\x1cgoogle/api/annotations.proto\"g\n" +
 	"\fLoginRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x0f\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x1f\n" +
+	"\vremember_me\x18\x03 \x01(\bR\n" +
+	"rememberMe\"\x0f\n" +
 	"\rLoginResponse\"\x0f\n" +
 	"\rLogoutRequest\"\x10\n" +
 	"\x0eLogoutResponse2\xe4\x01\n" +

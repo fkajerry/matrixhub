@@ -8,6 +8,7 @@ import * as fm from "../fetch.pb"
 export type LoginRequest = {
   username?: string
   password?: string
+  rememberMe?: boolean
 }
 
 export type LoginResponse = {

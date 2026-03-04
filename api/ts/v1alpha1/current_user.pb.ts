@@ -5,8 +5,16 @@
 */
 
 import * as fm from "../fetch.pb"
+
+export enum AccessTokenStatus {
+  ACCESS_TOKEN_STATUS_UNKNOWN = "ACCESS_TOKEN_STATUS_UNKNOWN",
+  ACCESS_TOKEN_STATUS_VALID = "ACCESS_TOKEN_STATUS_VALID",
+  ACCESS_TOKEN_STATUS_EXPIRED = "ACCESS_TOKEN_STATUS_EXPIRED",
+}
+
 export type ResetPasswordRequest = {
-  password?: string
+  oldPassword?: string
+  newPassword?: string
 }
 
 export type ResetPasswordResponse = {
@@ -22,7 +30,7 @@ export type ListAccessTokensResponse = {
 export type AccessToken = {
   id?: string
   name?: string
-  updatedAt?: string
+  status?: AccessTokenStatus
   createdAt?: string
   expiredAt?: string
 }

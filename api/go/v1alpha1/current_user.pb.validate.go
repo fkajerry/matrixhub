@@ -60,9 +60,20 @@ func (m *ResetPasswordRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetPassword()) < 1 {
+	if utf8.RuneCountInString(m.GetOldPassword()) < 1 {
 		err := ResetPasswordRequestValidationError{
-			field:  "Password",
+			field:  "OldPassword",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if utf8.RuneCountInString(m.GetNewPassword()) < 1 {
+		err := ResetPasswordRequestValidationError{
+			field:  "NewPassword",
 			reason: "value length must be at least 1 runes",
 		}
 		if !all {
@@ -517,7 +528,7 @@ func (m *AccessToken) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for UpdatedAt
+	// no validation rules for Status
 
 	// no validation rules for CreatedAt
 

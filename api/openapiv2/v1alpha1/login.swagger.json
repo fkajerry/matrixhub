@@ -45,6 +45,12 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "rememberMe",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [

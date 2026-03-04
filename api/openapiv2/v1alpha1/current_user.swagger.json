@@ -193,8 +193,8 @@
         "name": {
           "type": "string"
         },
-        "updatedAt": {
-          "type": "string"
+        "status": {
+          "$ref": "#/definitions/v1alpha1AccessTokenStatus"
         },
         "createdAt": {
           "type": "string"
@@ -203,6 +203,15 @@
           "type": "string"
         }
       }
+    },
+    "v1alpha1AccessTokenStatus": {
+      "type": "string",
+      "enum": [
+        "ACCESS_TOKEN_STATUS_UNKNOWN",
+        "ACCESS_TOKEN_STATUS_VALID",
+        "ACCESS_TOKEN_STATUS_EXPIRED"
+      ],
+      "default": "ACCESS_TOKEN_STATUS_UNKNOWN"
     },
     "v1alpha1CreateAccessTokenRequest": {
       "type": "object",
@@ -247,7 +256,10 @@
     "v1alpha1ResetPasswordRequest": {
       "type": "object",
       "properties": {
-        "password": {
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
           "type": "string"
         }
       }

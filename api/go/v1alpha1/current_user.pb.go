@@ -23,9 +23,59 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AccessTokenStatus int32
+
+const (
+	AccessTokenStatus_ACCESS_TOKEN_STATUS_UNKNOWN AccessTokenStatus = 0
+	AccessTokenStatus_ACCESS_TOKEN_STATUS_VALID   AccessTokenStatus = 1
+	AccessTokenStatus_ACCESS_TOKEN_STATUS_EXPIRED AccessTokenStatus = 2
+)
+
+// Enum value maps for AccessTokenStatus.
+var (
+	AccessTokenStatus_name = map[int32]string{
+		0: "ACCESS_TOKEN_STATUS_UNKNOWN",
+		1: "ACCESS_TOKEN_STATUS_VALID",
+		2: "ACCESS_TOKEN_STATUS_EXPIRED",
+	}
+	AccessTokenStatus_value = map[string]int32{
+		"ACCESS_TOKEN_STATUS_UNKNOWN": 0,
+		"ACCESS_TOKEN_STATUS_VALID":   1,
+		"ACCESS_TOKEN_STATUS_EXPIRED": 2,
+	}
+)
+
+func (x AccessTokenStatus) Enum() *AccessTokenStatus {
+	p := new(AccessTokenStatus)
+	*p = x
+	return p
+}
+
+func (x AccessTokenStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (AccessTokenStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_v1alpha1_current_user_proto_enumTypes[0].Descriptor()
+}
+
+func (AccessTokenStatus) Type() protoreflect.EnumType {
+	return &file_v1alpha1_current_user_proto_enumTypes[0]
+}
+
+func (x AccessTokenStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use AccessTokenStatus.Descriptor instead.
+func (AccessTokenStatus) EnumDescriptor() ([]byte, []int) {
+	return file_v1alpha1_current_user_proto_rawDescGZIP(), []int{0}
+}
+
 type ResetPasswordRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Password      string                 `protobuf:"bytes,1,opt,name=password,proto3" json:"password,omitempty"`
+	OldPassword   string                 `protobuf:"bytes,1,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
+	NewPassword   string                 `protobuf:"bytes,2,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,9 +110,16 @@ func (*ResetPasswordRequest) Descriptor() ([]byte, []int) {
 	return file_v1alpha1_current_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ResetPasswordRequest) GetPassword() string {
+func (x *ResetPasswordRequest) GetOldPassword() string {
 	if x != nil {
-		return x.Password
+		return x.OldPassword
+	}
+	return ""
+}
+
+func (x *ResetPasswordRequest) GetNewPassword() string {
+	if x != nil {
+		return x.NewPassword
 	}
 	return ""
 }
@@ -187,7 +244,7 @@ type AccessToken struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Status        AccessTokenStatus      `protobuf:"varint,3,opt,name=status,proto3,enum=matrixhub.v1alpha1.AccessTokenStatus" json:"status,omitempty"`
 	CreatedAt     string                 `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	ExpiredAt     string                 `protobuf:"bytes,5,opt,name=expired_at,json=expiredAt,proto3" json:"expired_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -238,11 +295,11 @@ func (x *AccessToken) GetName() string {
 	return ""
 }
 
-func (x *AccessToken) GetUpdatedAt() string {
+func (x *AccessToken) GetStatus() AccessTokenStatus {
 	if x != nil {
-		return x.UpdatedAt
+		return x.Status
 	}
-	return ""
+	return AccessTokenStatus_ACCESS_TOKEN_STATUS_UNKNOWN
 }
 
 func (x *AccessToken) GetCreatedAt() string {
@@ -511,18 +568,18 @@ var File_v1alpha1_current_user_proto protoreflect.FileDescriptor
 
 const file_v1alpha1_current_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1bv1alpha1/current_user.proto\x12\x12matrixhub.v1alpha1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\";\n" +
-	"\x14ResetPasswordRequest\x12#\n" +
-	"\bpassword\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\bpassword\"\x17\n" +
+	"\x1bv1alpha1/current_user.proto\x12\x12matrixhub.v1alpha1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"n\n" +
+	"\x14ResetPasswordRequest\x12*\n" +
+	"\fold_password\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\voldPassword\x12*\n" +
+	"\fnew_password\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\vnewPassword\"\x17\n" +
 	"\x15ResetPasswordResponse\"\x19\n" +
 	"\x17ListAccessTokensRequest\"Q\n" +
 	"\x18ListAccessTokensResponse\x125\n" +
-	"\x05items\x18\x01 \x03(\v2\x1f.matrixhub.v1alpha1.AccessTokenR\x05items\"\x8e\x01\n" +
+	"\x05items\x18\x01 \x03(\v2\x1f.matrixhub.v1alpha1.AccessTokenR\x05items\"\xae\x01\n" +
 	"\vAccessToken\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1d\n" +
-	"\n" +
-	"updated_at\x18\x03 \x01(\tR\tupdatedAt\x12\x1d\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12=\n" +
+	"\x06status\x18\x03 \x01(\x0e2%.matrixhub.v1alpha1.AccessTokenStatusR\x06status\x12\x1d\n" +
 	"\n" +
 	"created_at\x18\x04 \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
@@ -540,7 +597,11 @@ const file_v1alpha1_current_user_proto_rawDesc = "" +
 	"\rproject_roles\x18\x01 \x03(\v2=.matrixhub.v1alpha1.GetProjectRolesResponse.ProjectRolesEntryR\fprojectRoles\x1a?\n" +
 	"\x11ProjectRolesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012\xb9\x06\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01*t\n" +
+	"\x11AccessTokenStatus\x12\x1f\n" +
+	"\x1bACCESS_TOKEN_STATUS_UNKNOWN\x10\x00\x12\x1d\n" +
+	"\x19ACCESS_TOKEN_STATUS_VALID\x10\x01\x12\x1f\n" +
+	"\x1bACCESS_TOKEN_STATUS_EXPIRED\x10\x022\xb9\x06\n" +
 	"\vCurrentUser\x12\x9a\x01\n" +
 	"\rResetPassword\x12(.matrixhub.v1alpha1.ResetPasswordRequest\x1a).matrixhub.v1alpha1.ResetPasswordResponse\"4\x82\xd3\xe4\x93\x02.:\x01*\")/api/v1alpha1/current-user/reset-password\x12\x9f\x01\n" +
 	"\x10ListAccessTokens\x12+.matrixhub.v1alpha1.ListAccessTokensRequest\x1a,.matrixhub.v1alpha1.ListAccessTokensResponse\"0\x82\xd3\xe4\x93\x02*\x12(/api/v1alpha1/current-user/access-tokens\x12\xa6\x01\n" +
@@ -560,39 +621,42 @@ func file_v1alpha1_current_user_proto_rawDescGZIP() []byte {
 	return file_v1alpha1_current_user_proto_rawDescData
 }
 
+var file_v1alpha1_current_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_v1alpha1_current_user_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_v1alpha1_current_user_proto_goTypes = []any{
-	(*ResetPasswordRequest)(nil),      // 0: matrixhub.v1alpha1.ResetPasswordRequest
-	(*ResetPasswordResponse)(nil),     // 1: matrixhub.v1alpha1.ResetPasswordResponse
-	(*ListAccessTokensRequest)(nil),   // 2: matrixhub.v1alpha1.ListAccessTokensRequest
-	(*ListAccessTokensResponse)(nil),  // 3: matrixhub.v1alpha1.ListAccessTokensResponse
-	(*AccessToken)(nil),               // 4: matrixhub.v1alpha1.AccessToken
-	(*CreateAccessTokenRequest)(nil),  // 5: matrixhub.v1alpha1.CreateAccessTokenRequest
-	(*CreateAccessTokenResponse)(nil), // 6: matrixhub.v1alpha1.CreateAccessTokenResponse
-	(*DeleteAccessTokenRequest)(nil),  // 7: matrixhub.v1alpha1.DeleteAccessTokenRequest
-	(*DeleteAccessTokenResponse)(nil), // 8: matrixhub.v1alpha1.DeleteAccessTokenResponse
-	(*GetProjectRolesRequest)(nil),    // 9: matrixhub.v1alpha1.GetProjectRolesRequest
-	(*GetProjectRolesResponse)(nil),   // 10: matrixhub.v1alpha1.GetProjectRolesResponse
-	nil,                               // 11: matrixhub.v1alpha1.GetProjectRolesResponse.ProjectRolesEntry
+	(AccessTokenStatus)(0),            // 0: matrixhub.v1alpha1.AccessTokenStatus
+	(*ResetPasswordRequest)(nil),      // 1: matrixhub.v1alpha1.ResetPasswordRequest
+	(*ResetPasswordResponse)(nil),     // 2: matrixhub.v1alpha1.ResetPasswordResponse
+	(*ListAccessTokensRequest)(nil),   // 3: matrixhub.v1alpha1.ListAccessTokensRequest
+	(*ListAccessTokensResponse)(nil),  // 4: matrixhub.v1alpha1.ListAccessTokensResponse
+	(*AccessToken)(nil),               // 5: matrixhub.v1alpha1.AccessToken
+	(*CreateAccessTokenRequest)(nil),  // 6: matrixhub.v1alpha1.CreateAccessTokenRequest
+	(*CreateAccessTokenResponse)(nil), // 7: matrixhub.v1alpha1.CreateAccessTokenResponse
+	(*DeleteAccessTokenRequest)(nil),  // 8: matrixhub.v1alpha1.DeleteAccessTokenRequest
+	(*DeleteAccessTokenResponse)(nil), // 9: matrixhub.v1alpha1.DeleteAccessTokenResponse
+	(*GetProjectRolesRequest)(nil),    // 10: matrixhub.v1alpha1.GetProjectRolesRequest
+	(*GetProjectRolesResponse)(nil),   // 11: matrixhub.v1alpha1.GetProjectRolesResponse
+	nil,                               // 12: matrixhub.v1alpha1.GetProjectRolesResponse.ProjectRolesEntry
 }
 var file_v1alpha1_current_user_proto_depIdxs = []int32{
-	4,  // 0: matrixhub.v1alpha1.ListAccessTokensResponse.items:type_name -> matrixhub.v1alpha1.AccessToken
-	11, // 1: matrixhub.v1alpha1.GetProjectRolesResponse.project_roles:type_name -> matrixhub.v1alpha1.GetProjectRolesResponse.ProjectRolesEntry
-	0,  // 2: matrixhub.v1alpha1.CurrentUser.ResetPassword:input_type -> matrixhub.v1alpha1.ResetPasswordRequest
-	2,  // 3: matrixhub.v1alpha1.CurrentUser.ListAccessTokens:input_type -> matrixhub.v1alpha1.ListAccessTokensRequest
-	5,  // 4: matrixhub.v1alpha1.CurrentUser.CreateAccessToken:input_type -> matrixhub.v1alpha1.CreateAccessTokenRequest
-	7,  // 5: matrixhub.v1alpha1.CurrentUser.DeleteAccessToken:input_type -> matrixhub.v1alpha1.DeleteAccessTokenRequest
-	9,  // 6: matrixhub.v1alpha1.CurrentUser.GetProjectRoles:input_type -> matrixhub.v1alpha1.GetProjectRolesRequest
-	1,  // 7: matrixhub.v1alpha1.CurrentUser.ResetPassword:output_type -> matrixhub.v1alpha1.ResetPasswordResponse
-	3,  // 8: matrixhub.v1alpha1.CurrentUser.ListAccessTokens:output_type -> matrixhub.v1alpha1.ListAccessTokensResponse
-	6,  // 9: matrixhub.v1alpha1.CurrentUser.CreateAccessToken:output_type -> matrixhub.v1alpha1.CreateAccessTokenResponse
-	8,  // 10: matrixhub.v1alpha1.CurrentUser.DeleteAccessToken:output_type -> matrixhub.v1alpha1.DeleteAccessTokenResponse
-	10, // 11: matrixhub.v1alpha1.CurrentUser.GetProjectRoles:output_type -> matrixhub.v1alpha1.GetProjectRolesResponse
-	7,  // [7:12] is the sub-list for method output_type
-	2,  // [2:7] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+	5,  // 0: matrixhub.v1alpha1.ListAccessTokensResponse.items:type_name -> matrixhub.v1alpha1.AccessToken
+	0,  // 1: matrixhub.v1alpha1.AccessToken.status:type_name -> matrixhub.v1alpha1.AccessTokenStatus
+	12, // 2: matrixhub.v1alpha1.GetProjectRolesResponse.project_roles:type_name -> matrixhub.v1alpha1.GetProjectRolesResponse.ProjectRolesEntry
+	1,  // 3: matrixhub.v1alpha1.CurrentUser.ResetPassword:input_type -> matrixhub.v1alpha1.ResetPasswordRequest
+	3,  // 4: matrixhub.v1alpha1.CurrentUser.ListAccessTokens:input_type -> matrixhub.v1alpha1.ListAccessTokensRequest
+	6,  // 5: matrixhub.v1alpha1.CurrentUser.CreateAccessToken:input_type -> matrixhub.v1alpha1.CreateAccessTokenRequest
+	8,  // 6: matrixhub.v1alpha1.CurrentUser.DeleteAccessToken:input_type -> matrixhub.v1alpha1.DeleteAccessTokenRequest
+	10, // 7: matrixhub.v1alpha1.CurrentUser.GetProjectRoles:input_type -> matrixhub.v1alpha1.GetProjectRolesRequest
+	2,  // 8: matrixhub.v1alpha1.CurrentUser.ResetPassword:output_type -> matrixhub.v1alpha1.ResetPasswordResponse
+	4,  // 9: matrixhub.v1alpha1.CurrentUser.ListAccessTokens:output_type -> matrixhub.v1alpha1.ListAccessTokensResponse
+	7,  // 10: matrixhub.v1alpha1.CurrentUser.CreateAccessToken:output_type -> matrixhub.v1alpha1.CreateAccessTokenResponse
+	9,  // 11: matrixhub.v1alpha1.CurrentUser.DeleteAccessToken:output_type -> matrixhub.v1alpha1.DeleteAccessTokenResponse
+	11, // 12: matrixhub.v1alpha1.CurrentUser.GetProjectRoles:output_type -> matrixhub.v1alpha1.GetProjectRolesResponse
+	8,  // [8:13] is the sub-list for method output_type
+	3,  // [3:8] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_v1alpha1_current_user_proto_init() }
@@ -605,13 +669,14 @@ func file_v1alpha1_current_user_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1alpha1_current_user_proto_rawDesc), len(file_v1alpha1_current_user_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_v1alpha1_current_user_proto_goTypes,
 		DependencyIndexes: file_v1alpha1_current_user_proto_depIdxs,
+		EnumInfos:         file_v1alpha1_current_user_proto_enumTypes,
 		MessageInfos:      file_v1alpha1_current_user_proto_msgTypes,
 	}.Build()
 	File_v1alpha1_current_user_proto = out.File
