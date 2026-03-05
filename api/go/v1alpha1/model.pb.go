@@ -734,12 +734,15 @@ func (x *Revisions) GetTags() []*Revision {
 }
 
 type ListModelCommitsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Project       string                 `protobuf:"bytes,1,opt,name=project,proto3" json:"project,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Revision      string                 `protobuf:"bytes,3,opt,name=revision,proto3" json:"revision,omitempty"`
-	Page          int32                  `protobuf:"varint,4,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,5,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Project  string                 `protobuf:"bytes,1,opt,name=project,proto3" json:"project,omitempty"`
+	Name     string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Revision string                 `protobuf:"bytes,3,opt,name=revision,proto3" json:"revision,omitempty"`
+	// If true, include diff information for each commit.
+	// Default is false to avoid returning large amounts of data.
+	Diff          bool  `protobuf:"varint,4,opt,name=diff,proto3" json:"diff,omitempty"`
+	Page          int32 `protobuf:"varint,5,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32 `protobuf:"varint,6,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -793,6 +796,13 @@ func (x *ListModelCommitsRequest) GetRevision() string {
 		return x.Revision
 	}
 	return ""
+}
+
+func (x *ListModelCommitsRequest) GetDiff() bool {
+	if x != nil {
+		return x.Diff
+	}
+	return false
 }
 
 func (x *ListModelCommitsRequest) GetPage() int32 {
@@ -1729,13 +1739,14 @@ const file_v1alpha1_model_proto_rawDesc = "" +
 	"\trevisions\x18\x01 \x01(\v2\x1d.matrixhub.v1alpha1.RevisionsR\trevisions\"w\n" +
 	"\tRevisions\x128\n" +
 	"\bbranches\x18\x01 \x03(\v2\x1c.matrixhub.v1alpha1.RevisionR\bbranches\x120\n" +
-	"\x04tags\x18\x02 \x03(\v2\x1c.matrixhub.v1alpha1.RevisionR\x04tags\"\xa6\x01\n" +
+	"\x04tags\x18\x02 \x03(\v2\x1c.matrixhub.v1alpha1.RevisionR\x04tags\"\xba\x01\n" +
 	"\x17ListModelCommitsRequest\x12!\n" +
 	"\aproject\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\aproject\x12\x1b\n" +
 	"\x04name\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x04name\x12\x1a\n" +
 	"\brevision\x18\x03 \x01(\tR\brevision\x12\x12\n" +
-	"\x04page\x18\x04 \x01(\x05R\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x05 \x01(\x05R\bpageSize\"\x8c\x01\n" +
+	"\x04diff\x18\x04 \x01(\bR\x04diff\x12\x12\n" +
+	"\x04page\x18\x05 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x06 \x01(\x05R\bpageSize\"\x8c\x01\n" +
 	"\x18ListModelCommitsResponse\x120\n" +
 	"\x05items\x18\x01 \x03(\v2\x1a.matrixhub.v1alpha1.CommitR\x05items\x12>\n" +
 	"\n" +

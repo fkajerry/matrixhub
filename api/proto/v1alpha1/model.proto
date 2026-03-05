@@ -133,8 +133,11 @@ message ListModelCommitsRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
   string name = 2 [(validate.rules).string.min_len = 1];
   string revision = 3;
-  int32 page = 4;
-  int32 page_size = 5;
+  // If true, include diff information for each commit.
+  // Default is false to avoid returning large amounts of data.
+  bool diff = 4;
+  int32 page = 5;
+  int32 page_size = 6;
 }
 
 message ListModelCommitsResponse {

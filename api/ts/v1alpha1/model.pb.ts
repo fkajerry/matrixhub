@@ -78,6 +78,7 @@ export type ListModelCommitsRequest = {
   project?: string
   name?: string
   revision?: string
+  diff?: boolean
   page?: number
   pageSize?: number
 }

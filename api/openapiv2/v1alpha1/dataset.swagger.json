@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "v1alpha1/model.proto",
+    "title": "v1alpha1/dataset.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Models"
+      "name": "Datasets"
     }
   ],
   "consumes": [
@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1alpha1/models": {
+    "/api/v1alpha1/datasets": {
       "get": {
-        "operationId": "Models_ListModels",
+        "operationId": "Datasets_ListDatasets",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListModelsResponse"
+              "$ref": "#/definitions/v1alpha1ListDatasetsResponse"
             }
           },
           "default": {
@@ -68,16 +68,16 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       },
       "post": {
-        "operationId": "Models_CreateModel",
+        "operationId": "Datasets_CreateDataset",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1CreateModelResponse"
+              "$ref": "#/definitions/v1alpha1CreateDatasetResponse"
             }
           },
           "default": {
@@ -93,23 +93,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1alpha1CreateModelRequest"
+              "$ref": "#/definitions/v1alpha1CreateDatasetRequest"
             }
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     },
-    "/api/v1alpha1/models/frame-labels": {
+    "/api/v1alpha1/datasets/task-labels": {
       "get": {
-        "operationId": "Models_ListModelFrameLabels",
+        "operationId": "Datasets_ListDatasetTaskLabels",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListModelFrameLabelsResponse"
+              "$ref": "#/definitions/v1alpha1ListDatasetTaskLabelsResponse"
             }
           },
           "default": {
@@ -120,40 +120,18 @@
           }
         },
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     },
-    "/api/v1alpha1/models/task-labels": {
+    "/api/v1alpha1/datasets/{project}/{name}": {
       "get": {
-        "operationId": "Models_ListModelTaskLabels",
+        "operationId": "Datasets_GetDataset",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListModelTaskLabelsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Models"
-        ]
-      }
-    },
-    "/api/v1alpha1/models/{project}/{name}": {
-      "get": {
-        "operationId": "Models_GetModel",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1alpha1Model"
+              "$ref": "#/definitions/v1alpha1Dataset"
             }
           },
           "default": {
@@ -178,16 +156,16 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       },
       "delete": {
-        "operationId": "Models_DeleteModel",
+        "operationId": "Datasets_DeleteDataset",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1DeleteModelResponse"
+              "$ref": "#/definitions/v1alpha1DeleteDatasetResponse"
             }
           },
           "default": {
@@ -212,18 +190,18 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     },
-    "/api/v1alpha1/models/{project}/{name}/blob": {
+    "/api/v1alpha1/datasets/{project}/{name}/blob": {
       "get": {
-        "operationId": "Models_GetModelBlob",
+        "operationId": "Datasets_GetDatasetBlob",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1GetModelBlobResponse"
+              "$ref": "#/definitions/v1alpha1GetDatasetBlobResponse"
             }
           },
           "default": {
@@ -260,18 +238,18 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     },
-    "/api/v1alpha1/models/{project}/{name}/commits": {
+    "/api/v1alpha1/datasets/{project}/{name}/commits": {
       "get": {
-        "operationId": "Models_ListModelCommits",
+        "operationId": "Datasets_ListDatasetCommits",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListModelCommitsResponse"
+              "$ref": "#/definitions/v1alpha1ListDatasetCommitsResponse"
             }
           },
           "default": {
@@ -323,13 +301,13 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     },
-    "/api/v1alpha1/models/{project}/{name}/commits/{id}": {
+    "/api/v1alpha1/datasets/{project}/{name}/commits/{id}": {
       "get": {
-        "operationId": "Models_GetModelCommit",
+        "operationId": "Datasets_GetDatasetCommit",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -365,18 +343,18 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     },
-    "/api/v1alpha1/models/{project}/{name}/revisions": {
+    "/api/v1alpha1/datasets/{project}/{name}/revisions": {
       "get": {
-        "operationId": "Models_ListModelRevisions",
+        "operationId": "Datasets_ListDatasetRevisions",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1ListModelRevisionsResponse"
+              "$ref": "#/definitions/v1alpha1ListDatasetRevisionsResponse"
             }
           },
           "default": {
@@ -401,18 +379,18 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     },
-    "/api/v1alpha1/models/{project}/{name}/tree": {
+    "/api/v1alpha1/datasets/{project}/{name}/tree": {
       "get": {
-        "operationId": "Models_GetModelTree",
+        "operationId": "Datasets_GetDatasetTree",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1alpha1GetModelTreeResponse"
+              "$ref": "#/definitions/v1alpha1GetDatasetTreeResponse"
             }
           },
           "default": {
@@ -449,7 +427,7 @@
           }
         ],
         "tags": [
-          "Models"
+          "Datasets"
         ]
       }
     }
@@ -551,7 +529,7 @@
         }
       }
     },
-    "v1alpha1CreateModelRequest": {
+    "v1alpha1CreateDatasetRequest": {
       "type": "object",
       "properties": {
         "project": {
@@ -562,10 +540,66 @@
         }
       }
     },
-    "v1alpha1CreateModelResponse": {
+    "v1alpha1CreateDatasetResponse": {
       "type": "object"
     },
-    "v1alpha1DeleteModelResponse": {
+    "v1alpha1Dataset": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "project": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "defaultBranch": {
+          "type": "string"
+        },
+        "task": {
+          "type": "string"
+        },
+        "numRows": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/matrixhubV1alpha1Label"
+          }
+        },
+        "size": {
+          "type": "string"
+        },
+        "cloneUrls": {
+          "$ref": "#/definitions/v1alpha1CloneUrls"
+        },
+        "readmeContent": {
+          "type": "string"
+        },
+        "downloads": {
+          "type": "string",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "v1alpha1DeleteDatasetResponse": {
       "type": "object"
     },
     "v1alpha1Diff": {
@@ -593,7 +627,7 @@
       ],
       "default": "DIR"
     },
-    "v1alpha1GetModelBlobResponse": {
+    "v1alpha1GetDatasetBlobResponse": {
       "type": "object",
       "properties": {
         "name": {
@@ -623,19 +657,19 @@
         }
       }
     },
-    "v1alpha1GetModelTreeResponse": {
+    "v1alpha1GetDatasetTreeResponse": {
       "type": "object",
       "properties": {
         "items": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1GetModelBlobResponse"
+            "$ref": "#/definitions/v1alpha1GetDatasetBlobResponse"
           }
         }
       }
     },
-    "v1alpha1ListModelCommitsResponse": {
+    "v1alpha1ListDatasetCommitsResponse": {
       "type": "object",
       "properties": {
         "items": {
@@ -650,19 +684,7 @@
         }
       }
     },
-    "v1alpha1ListModelFrameLabelsResponse": {
-      "type": "object",
-      "properties": {
-        "item": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/matrixhubV1alpha1Label"
-          }
-        }
-      }
-    },
-    "v1alpha1ListModelRevisionsResponse": {
+    "v1alpha1ListDatasetRevisionsResponse": {
       "type": "object",
       "properties": {
         "revisions": {
@@ -670,7 +692,7 @@
         }
       }
     },
-    "v1alpha1ListModelTaskLabelsResponse": {
+    "v1alpha1ListDatasetTaskLabelsResponse": {
       "type": "object",
       "properties": {
         "item": {
@@ -682,61 +704,18 @@
         }
       }
     },
-    "v1alpha1ListModelsResponse": {
+    "v1alpha1ListDatasetsResponse": {
       "type": "object",
       "properties": {
-        "item": {
+        "items": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1alpha1Model"
+            "$ref": "#/definitions/v1alpha1Dataset"
           }
         },
         "pagination": {
           "$ref": "#/definitions/v1alpha1Pagination"
-        }
-      }
-    },
-    "v1alpha1Model": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "name": {
-          "type": "string"
-        },
-        "nickname": {
-          "type": "string"
-        },
-        "defaultBranch": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string"
-        },
-        "cloneUrls": {
-          "$ref": "#/definitions/v1alpha1CloneUrls"
-        },
-        "labels": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/matrixhubV1alpha1Label"
-          }
-        },
-        "project": {
-          "type": "string"
-        },
-        "readmeContent": {
-          "type": "string"
-        },
-        "size": {
-          "type": "string"
         }
       }
     },
