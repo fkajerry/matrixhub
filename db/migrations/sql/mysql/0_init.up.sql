@@ -43,12 +43,12 @@ CREATE TABLE IF NOT EXISTS `users`
 
 CREATE TABLE IF NOT EXISTS `roles`
 (
-    `id`           int         NOT NULL AUTO_INCREMENT,
-    `name`         varchar(64) NOT NULL,
-    `permissions`  text        NOT NULL,
-    `scope`        varchar(64) NOT NULL,
-    `created_at`   timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`   timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `id`          int         NOT NULL AUTO_INCREMENT,
+    `name`        varchar(64) NOT NULL,
+    `permissions` text        NOT NULL,
+    `scope`       varchar(64) NOT NULL,
+    `created_at`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     KEY `name` (`name`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS `members_roles_projects`
     `id`          int         NOT NULL AUTO_INCREMENT,
     `member_id`   varchar(64) NOT NULL,
     `member_type` varchar(64) NOT NULL,
-    `role_id`     int         DEFAULT NULL,
-    `project_id`  int         DEFAULT NULL,
+    `role_id`     int                  DEFAULT NULL,
+    `project_id`  int                  DEFAULT NULL,
     `created_at`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -75,9 +75,10 @@ CREATE TABLE IF NOT EXISTS `models`
     `name`            varchar(255) NOT NULL COMMENT 'Model name (e.g., Llama-2-7b-hf)',
     `project_id`      int          NOT NULL COMMENT 'Reference to projects.id',
     `size`            bigint       NOT NULL COMMENT 'Model size in Bytes',
+    `default_branch`  varchar(255) NOT NULL COMMENT 'Model branch (e.g., main)',
     `parameter_count` bigint       NOT NULL COMMENT 'Number of model parameters',
     `readme_content`  longtext     NOT NULL COMMENT 'Model README content',
-    `is_featured`     tinyint(1)   NOT NULL DEFAULT 0 COMMENT 'Featured model flag',
+    `is_popular`      tinyint(1)   NOT NULL DEFAULT 0 COMMENT 'popular model flag',
     `created_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -100,9 +101,9 @@ CREATE TABLE IF NOT EXISTS `labels`
 
 CREATE TABLE IF NOT EXISTS `models_labels`
 (
-    `model_id`   bigint      NOT NULL COMMENT 'Reference to models.id',
-    `label_id`   int         NOT NULL COMMENT 'Reference to labels.id',
-    `created_at` timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `model_id`   bigint    NOT NULL COMMENT 'Reference to models.id',
+    `label_id`   int       NOT NULL COMMENT 'Reference to labels.id',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`model_id`, `label_id`),
     CONSTRAINT `fk_model_labels_model_id` FOREIGN KEY (`model_id`) REFERENCES `models` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_model_labels_label_id` FOREIGN KEY (`label_id`) REFERENCES `labels` (`id`) ON DELETE CASCADE

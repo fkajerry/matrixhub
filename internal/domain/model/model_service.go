@@ -77,8 +77,7 @@ func (s *ModelService) CreateModel(ctx context.Context, project, name string) (*
 	}
 
 	model := &Model{
-		Name:       name,
-		IsFeatured: false,
+		Name: name,
 	}
 
 	if err := s.gitRepo.CreateRepository(ctx, project, name); err != nil {
@@ -141,7 +140,7 @@ func (s *ModelService) ListModelTaskLabels(ctx context.Context) ([]*Label, error
 
 // ListModelFrameLabels returns all framework labels for models.
 func (s *ModelService) ListModelFrameLabels(ctx context.Context) ([]*Label, error) {
-	return s.labelRepo.ListByCategoryAndScope(ctx, "framework", "model")
+	return s.labelRepo.ListByCategoryAndScope(ctx, "library", "model")
 }
 
 // ListModelRevisions returns all branches and tags for a model.

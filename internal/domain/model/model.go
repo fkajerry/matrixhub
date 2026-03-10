@@ -26,15 +26,13 @@ type Model struct {
 	ProjectID      int       `json:"projectId" db:"project_id"`
 	ProjectName    string    `json:"projectName" db:"project_name"`
 	Size           int64     `json:"size" db:"size"`
+	DefaultBranch  string    `json:"defaultBranch" db:"default_branch"`
 	ParameterCount int64     `json:"parameterCount" db:"parameter_count"`
 	ReadmeContent  string    `json:"readmeContent" db:"readme_content"`
-	IsFeatured     bool      `json:"isFeatured" db:"is_featured"`
-	Labels         []Label   `json:"labels" db:"-"`
+	IsPopular      bool      `json:"isPopular" db:"is_popular"`
+	Labels         []Label   `json:"labels" db:"-" gorm:"-"`
 	CreatedAt      time.Time `json:"createdAt" db:"created_at"`
 	UpdatedAt      time.Time `json:"updatedAt" db:"updated_at"`
-}
-
-func (m *Model) GenLabel() {
 }
 
 // Label represents a category label for models/datasets.
@@ -49,8 +47,9 @@ type Label struct {
 
 // Filter defines query parameters for listing models.
 type Filter struct {
-	Label    []string
-	Search   string // project name or model name, prioritize project name matching (supports fuzzy search).
+	Project  string   // filter by project name
+	Label    []string // filter by labels
+	Search   string   // project name or model name, prioritize project name matching (supports fuzzy search).
 	Sort     string
 	Page     int32
 	PageSize int32
