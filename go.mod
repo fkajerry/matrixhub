@@ -8,12 +8,13 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.3.0
 	github.com/felixge/httpsnoop v1.0.4
 	github.com/git-lfs/git-lfs/v3 v3.7.1
-	github.com/go-git/go-git/v5 v5.16.4
+	github.com/go-git/go-git/v5 v5.16.5
 	github.com/gorilla/context v1.1.2
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.6
 	github.com/lib/pq v1.10.9
+	github.com/matrixhub-ai/hfd v0.0.0-20260312094015-31ba83a04d46
 	github.com/mattn/go-sqlite3 v1.14.33
 	github.com/onsi/ginkgo/v2 v2.22.1
 	github.com/onsi/gomega v1.36.2
@@ -70,6 +71,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.3.0 // indirect
+	github.com/wzshiming/ioswmr v0.1.0 // indirect
 	go.uber.org/mock v0.5.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
@@ -86,7 +88,7 @@ require (
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect
 	github.com/alexbrainman/sspi v0.0.0-20210105120005-909beea2cc74 // indirect
 	github.com/avast/retry-go v2.4.2+incompatible // indirect
-	github.com/cloudflare/circl v1.6.1 // indirect
+	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/cyphar/filepath-securejoin v0.4.1 // indirect
 	github.com/dpotapov/go-spnego v0.0.0-20210315154721-298b63a54430 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect

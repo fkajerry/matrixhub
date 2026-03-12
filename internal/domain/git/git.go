@@ -43,7 +43,7 @@ type Commit struct {
 	AuthorDate     time.Time `json:"authorDate"`
 	CommitterName  string    `json:"committerName"`
 	CommitterEmail string    `json:"committerEmail"`
-	Diffs          []*Diff   `json:"diffs"`
+	Diff           string    `json:"diff"`
 	CreatedAt      time.Time `json:"createdAt"`
 	UpdatedAt      time.Time `json:"updatedAt"`
 }
@@ -66,14 +66,14 @@ const (
 
 // TreeEntry represents a file or directory in the Git tree.
 type TreeEntry struct {
-	Name    string   `json:"name"`
-	Type    FileType `json:"type"`
-	Size    int64    `json:"size"`
-	Path    string   `json:"path"`
-	Hash    string   `json:"hash"`
-	IsLFS   bool     `json:"isLFS"`
-	Content string   `json:"content,omitempty"` // File content for small files
-	Commit  *Commit  `json:"commit,omitempty"`
+	Name   string   `json:"name"`
+	Type   FileType `json:"type"`
+	Size   int64    `json:"size"`
+	Path   string   `json:"path"`
+	Hash   string   `json:"hash"`
+	IsLFS  bool     `json:"isLFS"`
+	URL    string   `json:"url,omitempty"`
+	Commit *Commit  `json:"commit,omitempty"`
 }
 
 type GitRepository struct {

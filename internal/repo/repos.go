@@ -15,6 +15,7 @@
 package repo
 
 import (
+	gitstorage "github.com/matrixhub-ai/hfd/pkg/storage"
 	"gorm.io/gorm"
 
 	"github.com/matrixhub-ai/matrixhub/internal/domain/dataset"
@@ -30,13 +31,14 @@ import (
 )
 
 type Repos struct {
-	DB      *gorm.DB
-	Project project.IProjectRepo
-	User    user.IUserRepo
-	Model   model.IModelRepo
-	Label   model.ILabelRepo
-	Git     git.IGitRepo
-	Dataset dataset.IDatasetRepo
+	DB         *gorm.DB
+	GitStorage *gitstorage.Storage
+	Project    project.IProjectRepo
+	User       user.IUserRepo
+	Model      model.IModelRepo
+	Label      model.ILabelRepo
+	Git        git.IGitRepo
+	Dataset    dataset.IDatasetRepo
 }
 
 func NewRepos(conf *config.Config) *Repos {
@@ -46,15 +48,18 @@ func NewRepos(conf *config.Config) *Repos {
 		log.Fatalw("create database failed", "error", err)
 	}
 
+	gitStorage := gitstorage.NewStorage(gitstorage.WithRootDir(conf.DataDir))
+
 	repos := &Repos{
-		DB: database,
+		DB:         database,
+		GitStorage: gitStorage,
 	}
 
 	repos.Project = NewProjectDBRepo(repos.DB)
 	repos.User = NewUserRepo(repos.DB)
 	repos.Model = NewModelDB(repos.DB)
 	repos.Label = NewLabelDB(repos.DB)
-	repos.Git = NewGitDB() // TODO: inject GitRepo implementation
+	repos.Git = NewGitDB(repos.GitStorage)
 	repos.Dataset = NewDatasetDB(repos.DB)
 
 	return repos

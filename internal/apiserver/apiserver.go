@@ -26,6 +26,15 @@ import (
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/matrixhub-ai/hfd/pkg/authenticate"
+	backendhf "github.com/matrixhub-ai/hfd/pkg/backend/hf"
+	backendhttp "github.com/matrixhub-ai/hfd/pkg/backend/http"
+	backendlfs "github.com/matrixhub-ai/hfd/pkg/backend/lfs"
+	"github.com/matrixhub-ai/hfd/pkg/lfs"
+	"github.com/matrixhub-ai/hfd/pkg/mirror"
+	"github.com/matrixhub-ai/hfd/pkg/permission"
+	"github.com/matrixhub-ai/hfd/pkg/receive"
+	"github.com/matrixhub-ai/hfd/pkg/storage"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 
@@ -108,9 +117,88 @@ func NewAPIServer(config *config.Config) *APIServer {
 
 	server.initHandlersServicesRepos()
 
+	server.httpServer.Handler = server.initBackends(server.httpServer.Handler)
+
 	server.registerRoutersAndHandlers()
 
 	return server
+}
+
+func (server *APIServer) initBackends(handler http.Handler) http.Handler {
+	storage := storage.NewStorage(
+		storage.WithRootDir(server.config.DataDir),
+	)
+
+	var lfsStorage = lfs.NewLocal(storage.LFSDir())
+
+	permissionHookFunc := func(ctx context.Context, op permission.Operation, repoName string, opCtx permission.Context) (bool, error) {
+		// userInfo, _ := authenticate.GetUserInfo(ctx)
+		return true, nil // or return false, nil to deny, or return an error to indicate an error
+	}
+
+	preReceiveHookFunc := func(ctx context.Context, repoName string, updates []receive.RefUpdate) (bool, error) {
+		// userInfo, _ := authenticate.GetUserInfo(ctx)
+		return true, nil // or return false, nil to deny, or return an error to indicate an error
+	}
+
+	postReceiveHookFunc := func(ctx context.Context, repoName string, updates []receive.RefUpdate) error {
+		// userInfo, _ := authenticate.GetUserInfo(ctx)
+		return nil
+	}
+
+	var sharedMirror *mirror.Mirror
+
+	lfsTeeCache := lfs.NewTeeCache(
+		lfsStorage,
+	)
+
+	mirrorSourceFunc := func(ctx context.Context, repoName string) (string, bool, error) {
+		// return baseURL + "/" + repoName, true, nil
+		return "", false, nil
+	}
+	mirrorRefFilterFunc := func(ctx context.Context, repoName string, remoteRefs []string) ([]string, error) {
+		return remoteRefs, nil
+	}
+	sharedMirror = mirror.NewMirror(
+		mirror.WithMirrorSourceFunc(mirrorSourceFunc),
+		mirror.WithMirrorRefFilterFunc(mirrorRefFilterFunc),
+		mirror.WithPreReceiveHookFunc(preReceiveHookFunc),
+		mirror.WithPostReceiveHookFunc(postReceiveHookFunc),
+		mirror.WithLFSCache(lfsTeeCache),
+		mirror.WithTTL(time.Hour),
+	)
+
+	handler = backendhf.NewHandler(
+		backendhf.WithStorage(storage),
+		backendhf.WithNext(handler),
+		backendhf.WithMirror(sharedMirror),
+		backendhf.WithPermissionHookFunc(permissionHookFunc),
+		backendhf.WithPreReceiveHookFunc(preReceiveHookFunc),
+		backendhf.WithPostReceiveHookFunc(postReceiveHookFunc),
+		backendhf.WithLFSStorage(lfsStorage),
+	)
+
+	handler = backendlfs.NewHandler(
+		backendlfs.WithStorage(storage),
+		backendlfs.WithNext(handler),
+		backendlfs.WithMirror(sharedMirror),
+		backendlfs.WithPermissionHookFunc(permissionHookFunc),
+		backendlfs.WithLFSStorage(lfsStorage),
+		backendlfs.WithMirror(sharedMirror),
+	)
+
+	handler = backendhttp.NewHandler(
+		backendhttp.WithStorage(storage),
+		backendhttp.WithNext(handler),
+		backendhttp.WithMirror(sharedMirror),
+		backendhttp.WithPermissionHookFunc(permissionHookFunc),
+		backendhttp.WithPreReceiveHookFunc(preReceiveHookFunc),
+		backendhttp.WithPostReceiveHookFunc(postReceiveHookFunc),
+	)
+
+	handler = authenticate.AnonymousAuthenticateHandler(handler)
+
+	return handler
 }
 
 func (server *APIServer) initHandlersServicesRepos() {

@@ -31,6 +31,8 @@ type Config struct {
 	APIServer     *APIServerConfig `yaml:"apiServer" validate:"required"`
 	MigrationPath string           `yaml:"migrationPath" validate:"required"`
 
+	DataDir string `yaml:"dataDir" validate:"required"`
+
 	Database db.Config `yaml:"database" validate:"required"`
 }
 
@@ -60,6 +62,16 @@ func Init(configPath, sqlPath string) (*Config, error) {
 
 	if cfg.Database.DSN == "" {
 		log.Warn("failed to find matrixhub dsn from env or config")
+	}
+
+	if cfg.DataDir == "" {
+		log.Warn("dataDir is not set, using default ./data")
+		cfg.DataDir = "./data"
+	}
+
+	err := os.MkdirAll(cfg.DataDir, os.ModePerm)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create data directory: %w", err)
 	}
 
 	if cfg.Database.Migrate {
