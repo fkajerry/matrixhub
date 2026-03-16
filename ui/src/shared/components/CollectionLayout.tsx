@@ -1,6 +1,5 @@
 import {
   Button,
-  Center,
   Group,
   Pagination,
   Stack,
@@ -35,18 +34,12 @@ export interface CollectionToolbarProps {
 }
 
 interface CollectionLayoutProps extends CollectionToolbarProps {
-  hasItems: boolean
   pagination?: PaginationData
   page: number
+  totalLabel?: string
   loading?: boolean
-  emptyTitle: ReactNode
-  emptyDescription: ReactNode
   children: ReactNode
   onPageChange: (page: number) => void
-}
-
-function hasContent(value: ReactNode) {
-  return value !== null && value !== undefined && value !== false && value !== ''
 }
 
 function DefaultToolbar({
@@ -106,14 +99,12 @@ function DefaultToolbar({
 }
 
 export function CollectionLayout({
-  hasItems,
   pagination,
   page,
   loading,
-  emptyTitle,
-  emptyDescription,
   children,
   onPageChange,
+  totalLabel,
   // Toolbar
   searchPlaceholder,
   searchValue,
@@ -126,9 +117,6 @@ export function CollectionLayout({
 }: CollectionLayoutProps) {
   const { t } = useTranslation()
   const showBatchDelete = (selectedCount ?? 0) > 0 && !!onBatchDelete
-  const hasEmptyTitle = hasContent(emptyTitle)
-  const hasEmptyDescription = hasContent(emptyDescription)
-  const showEmptyState = !hasItems && !loading && (hasEmptyTitle || hasEmptyDescription)
 
   const totalPages = pagination?.pages
     ?? (
@@ -163,26 +151,14 @@ export function CollectionLayout({
 
       {children}
 
-      {showEmptyState && (
-        <Center py="xl">
-          <Stack align="center" gap="xs">
-            {hasEmptyTitle && <Text fw={500}>{emptyTitle}</Text>}
-            {hasEmptyDescription && (
-              <Text size="sm" c="dimmed">
-                {emptyDescription}
-              </Text>
-            )}
-          </Stack>
-        </Center>
-      )}
-
       {pagination && totalPages > 1 && (
         <Group justify="space-between" py="sm">
-          <Text size="sm" c="dimmed">
-            {t('shared.total', { count: pagination.total ?? 0 })}
+          <Text size="sm" fw={500} c="dimmed">
+            {totalLabel ?? t('shared.total', { count: pagination.total ?? 0 })}
           </Text>
           <Pagination
-            size="sm"
+            size="xs"
+            radius="sm"
             value={page}
             onChange={onPageChange}
             total={totalPages}
