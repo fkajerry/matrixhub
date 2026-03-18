@@ -9,20 +9,11 @@ import { Link } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DataTable } from '@/shared/components/DataTable'
+import { DataTable, type TableProps } from '@/shared/components/DataTable'
 import { formatDateTime } from '@/shared/utils/date'
 
 import type { Project } from '@matrixhub/api-ts/v1alpha1/project.pb'
-import type { Pagination as PaginationData } from '@matrixhub/api-ts/v1alpha1/utils.pb'
-import type {
-  MRT_ColumnDef,
-  MRT_RowSelectionState,
-} from 'mantine-react-table'
-import type {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-} from 'react'
+import type { MRT_ColumnDef } from 'mantine-react-table'
 
 function isPublicProject(type?: ProjectType) {
   return type === ProjectType.PROJECT_TYPE_PUBLIC
@@ -31,6 +22,12 @@ function isPublicProject(type?: ProjectType) {
 type ProjectCellProps = Parameters<NonNullable<MRT_ColumnDef<Project>['Cell']>>[0]
 
 function ProjectNameCell({ row }: ProjectCellProps) {
+  const name = row.original.name
+
+  if (!name) {
+    return <Text fw={600}>-</Text>
+  }
+
   return (
     <Anchor
       fw={600}
@@ -39,11 +36,11 @@ function ProjectNameCell({ row }: ProjectCellProps) {
         <Link
           {...props}
           to="/projects/$projectId"
-          params={{ projectId: row.original.name ?? '' }}
+          params={{ projectId: name }}
         />
       )}
     >
-      {row.original.name}
+      {name}
     </Anchor>
   )
 }
@@ -97,23 +94,6 @@ function ProjectActionsCell({
   )
 }
 
-interface ProjectsTableProps {
-  records: Project[]
-  pagination?: PaginationData
-  page: number
-  loading?: boolean
-  searchValue?: string
-  onSearchChange?: (value: string) => void
-  onRefresh?: () => void
-  onDelete: (project: Project) => void
-  onBatchDelete?: () => void
-  rowSelection?: MRT_RowSelectionState
-  onRowSelectionChange?: Dispatch<SetStateAction<MRT_RowSelectionState>>
-  onPageChange: (page: number) => void
-  selectedCount?: number
-  toolbarExtra?: ReactNode
-}
-
 export function ProjectsTable({
   records,
   pagination,
@@ -129,7 +109,7 @@ export function ProjectsTable({
   onPageChange,
   selectedCount,
   toolbarExtra,
-}: ProjectsTableProps) {
+}: TableProps<Project>) {
   const { t } = useTranslation()
 
   const columns = useMemo<MRT_ColumnDef<Project>[]>(() => [
@@ -190,7 +170,7 @@ export function ProjectsTable({
       enableRowSelection
       rowSelection={rowSelection}
       onRowSelectionChange={onRowSelectionChange}
-      getRowId={row => row.name ?? ''}
+      getRowId={row => String(row.name)}
       tableOptions={{
         enableBatchRowSelection: true,
         enableMultiRowSelection: true,

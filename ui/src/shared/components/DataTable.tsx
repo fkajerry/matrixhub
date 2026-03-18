@@ -1,7 +1,7 @@
 import {
   type BoxProps,
   type PaperProps,
-  type TableProps,
+  type TableProps as MantineTableProps,
 } from '@mantine/core'
 import { MantineReactTable } from 'mantine-react-table'
 
@@ -20,6 +20,28 @@ import type {
 import type {
   Dispatch, ReactNode, SetStateAction,
 } from 'react'
+
+/**
+ * Common props for resource table wrappers (e.g. ProjectsTable, ModelsTable).
+ * Provides the standard set of pagination, search, selection, and action props
+ * so each resource table doesn't have to re-declare them.
+ */
+export interface TableProps<T> {
+  records: T[]
+  pagination?: PaginationData
+  page: number
+  loading?: boolean
+  searchValue?: string
+  onSearchChange?: (value: string) => void
+  onRefresh?: () => void
+  onDelete: (item: T) => void
+  onBatchDelete?: () => void
+  rowSelection?: MRT_RowSelectionState
+  onRowSelectionChange?: Dispatch<SetStateAction<MRT_RowSelectionState>>
+  onPageChange: (page: number) => void
+  selectedCount?: number
+  toolbarExtra?: ReactNode
+}
 
 interface DataTableProps<TData extends MRT_RowData> extends CollectionToolbarProps {
   /** Row data array */
@@ -41,7 +63,7 @@ interface DataTableProps<TData extends MRT_RowData> extends CollectionToolbarPro
   enableSelectAll?: boolean
   rowSelection?: MRT_RowSelectionState
   onRowSelectionChange?: Dispatch<SetStateAction<MRT_RowSelectionState>>
-  getRowId?: (row: TData) => string
+  getRowId?: (row: TData, index: number) => string
 
   // --- Row actions ---
   enableRowActions?: boolean
@@ -218,6 +240,7 @@ export function DataTable<TData extends MRT_RowData>({
             withBorder: false,
             style: {
               position: 'relative',
+              overflow: 'hidden',
             },
           },
           mantinePaperProps,
@@ -231,7 +254,7 @@ export function DataTable<TData extends MRT_RowData>({
           },
           mantineTableContainerProps,
         )}
-        mantineTableProps={mergeTableOptionProps<TData, TableProps>(
+        mantineTableProps={mergeTableOptionProps<TData, MantineTableProps>(
           {
             highlightOnHover: true,
             style: {

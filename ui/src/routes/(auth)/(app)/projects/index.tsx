@@ -8,19 +8,7 @@ const DEFAULT_PROJECTS_PAGE = 1
 const DEFAULT_PROJECTS_PAGE_SIZE = 10
 
 const pSearchParamSchema = z.object({
-  page: z.number().optional().transform((value) => {
-    if (value === undefined) {
-      return value
-    }
-
-    const parsedPage = Number(value)
-
-    if (!Number.isInteger(parsedPage) || parsedPage < DEFAULT_PROJECTS_PAGE) {
-      return DEFAULT_PROJECTS_PAGE
-    }
-
-    return parsedPage
-  }),
+  page: z.coerce.number().int().nonnegative().optional().catch(DEFAULT_PROJECTS_PAGE),
   query: z.string().optional().transform((value) => {
     if (value === undefined) {
       return value

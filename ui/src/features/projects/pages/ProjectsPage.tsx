@@ -32,6 +32,7 @@ export function ProjectsPage() {
   const router = useRouter()
   const navigate = projectsRouteApi.useNavigate()
   const search = projectsRouteApi.useSearch()
+  const [query, setQuery] = useState(search.query ?? '')
   const {
     projects,
     pagination,
@@ -39,7 +40,6 @@ export function ProjectsPage() {
   const loading = useRouterState({
     select: state => state.isLoading,
   })
-  const [query, setQuery] = useState(search.query)
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({})
 
   const updateSearchQuery = useDebouncedCallback((value: string) => {
