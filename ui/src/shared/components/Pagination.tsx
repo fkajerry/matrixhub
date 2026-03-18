@@ -1,7 +1,9 @@
 import {
   Group,
   Pagination as MantinePagination,
+  type PaginationProps as MantinePaginationProps,
   Text,
+  type TextProps,
 } from '@mantine/core'
 import { startTransition } from 'react'
 
@@ -13,6 +15,11 @@ export interface PaginationProps {
   page: number
   onPageChange: (page: number) => void
   totalLabel?: ReactNode
+  totalLabelProps?: TextProps
+  paginationProps?: Omit<
+    MantinePaginationProps,
+    'total' | 'value' | 'onChange'
+  >
 }
 
 export function Pagination({
@@ -21,6 +28,8 @@ export function Pagination({
   page,
   onPageChange,
   totalLabel,
+  totalLabelProps,
+  paginationProps,
 }: PaginationProps) {
   if (total <= 0 || totalPages <= 1) {
     return null
@@ -29,13 +38,14 @@ export function Pagination({
   return (
     <Group justify="space-between" py="sm">
       {totalLabel && (
-        <Text size="sm" fw={500} c="dimmed">
+        <Text size="sm" fw={500} c="dimmed" {...totalLabelProps}>
           {totalLabel}
         </Text>
       )}
       <MantinePagination
         size="xs"
         radius="sm"
+        {...paginationProps}
         value={page}
         onChange={(nextPage) => {
           startTransition(() => {

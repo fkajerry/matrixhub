@@ -1,7 +1,9 @@
 import {
   Flex,
+  type FlexProps,
   Group,
   TextInput,
+  type TextInputProps,
 } from '@mantine/core'
 import { useDebouncedCallback } from '@mantine/hooks'
 import {
@@ -18,7 +20,16 @@ export interface SearchToolbarProps {
   searchPlaceholder?: string
   searchValue?: string
   onSearchChange?: (value: string) => void
-  debounceMs?: number
+  toolbarProps?: Omit<FlexProps, 'children'>
+  searchInputProps?: Omit<
+    TextInputProps,
+    | 'defaultValue'
+    | 'value'
+    | 'onChange'
+    | 'placeholder'
+    | 'leftSection'
+    | 'styles'
+  >
   children?: ReactNode
 }
 
@@ -28,16 +39,21 @@ export function SearchToolbar({
   searchPlaceholder,
   searchValue = '',
   onSearchChange,
-  debounceMs = DEFAULT_DEBOUNCE_MS,
+  toolbarProps,
+  searchInputProps,
   children,
 }: SearchToolbarProps) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const {
+    w: searchWidth,
+    ...restSearchInputProps
+  } = searchInputProps ?? {}
 
   const debouncedSearchChange = useDebouncedCallback((value: string) => {
     startTransition(() => {
       onSearchChange?.(value)
     })
-  }, debounceMs)
+  }, DEFAULT_DEBOUNCE_MS)
 
   useEffect(() => {
     debouncedSearchChange.cancel()
@@ -52,16 +68,23 @@ export function SearchToolbar({
   const showSearch = Boolean(searchPlaceholder && onSearchChange)
 
   return (
-    <Flex justify="space-between" align="center" wrap="nowrap" gap="md" mb="md">
+    <Flex
+      justify="space-between"
+      align="center"
+      wrap="nowrap"
+      gap="md"
+      {...toolbarProps}
+    >
       {showSearch && (
         <TextInput
+          {...restSearchInputProps}
           defaultValue={searchValue}
           ref={inputRef}
           placeholder={searchPlaceholder}
           leftSection={(
             <SearchIcon
-              width={14}
-              height={14}
+              width={16}
+              height={16}
               style={{ color: 'var(--mantine-color-gray-5)' }}
             />
           )}
@@ -82,9 +105,16 @@ export function SearchToolbar({
               minHeight: 32,
               borderRadius: 16,
               fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '20px',
+              color: 'var(--mantine-color-gray-8)',
+              '&::placeholder': {
+                color: 'var(--mantine-color-gray-5)',
+                opacity: 1,
+              },
             },
           }}
-          w={260}
+          w={searchWidth ?? 260}
         />
       )}
 

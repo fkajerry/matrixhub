@@ -5,7 +5,6 @@ import {
   Stack,
   Title,
 } from '@mantine/core'
-import { useDebouncedCallback } from '@mantine/hooks'
 import {
   getRouteApi,
   useRouter,
@@ -32,7 +31,6 @@ export function ProjectsPage() {
   const router = useRouter()
   const navigate = projectsRouteApi.useNavigate()
   const search = projectsRouteApi.useSearch()
-  const [query, setQuery] = useState(search.query ?? '')
   const {
     projects,
     pagination,
@@ -42,30 +40,21 @@ export function ProjectsPage() {
   })
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({})
 
-  const updateSearchQuery = useDebouncedCallback((value: string) => {
-    const nextQuery = value.trim()
-
-    if (nextQuery === search.query) {
+  const handleSearchChange = useCallback((value: string) => {
+    if (value === (search.query ?? '')) {
       return
     }
 
     setRowSelection({})
-    startTransition(() => {
-      void navigate({
-        replace: true,
-        search: prev => ({
-          ...prev,
-          page: 1,
-          query: nextQuery,
-        }),
-      })
+    void navigate({
+      replace: true,
+      search: prev => ({
+        ...prev,
+        page: 1,
+        query: value,
+      }),
     })
-  }, 300)
-
-  const handleSearchChange = useCallback((value: string) => {
-    setQuery(value)
-    updateSearchQuery(value)
-  }, [updateSearchQuery])
+  }, [navigate, search.query])
 
   const handleCreate = () => {
     // TODO: open create project modal
@@ -123,7 +112,7 @@ export function ProjectsPage() {
             pagination={pagination}
             loading={loading}
             page={search.page ?? 1}
-            searchValue={query}
+            searchValue={search.query ?? ''}
             onSearchChange={handleSearchChange}
             onRefresh={handleRefresh}
             onDelete={handleDelete}

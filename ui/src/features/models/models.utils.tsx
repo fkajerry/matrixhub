@@ -1,8 +1,15 @@
-import dayjs from 'dayjs'
 import { filesize } from 'filesize'
 import humanFormat from 'human-format'
 
-import type { ResourceCardBadge } from '@/shared/components/ResourceCard'
+import ClockIcon from '@/assets/svgs/clock.svg?react'
+import ModelIcon from '@/assets/svgs/model.svg?react'
+import ProjectIcon from '@/assets/svgs/project.svg?react'
+import { formatDateTime } from '@/shared/utils/date'
+
+import type {
+  ResourceCardBadge,
+  ResourceCardMetaItem,
+} from '@/shared/components/ResourceCard'
 import type {
   Category,
   Label,
@@ -57,6 +64,34 @@ export function buildModelBadges(
   return badges
 }
 
+export function buildModelMetaItems(
+  model: Model,
+  projectId: string,
+  options?: {
+    projectIcon?: ResourceCardMetaItem['icon']
+    sizeIcon?: ResourceCardMetaItem['icon']
+    updatedAtIcon?: ResourceCardMetaItem['icon']
+  },
+): ResourceCardMetaItem[] {
+  return [
+    {
+      key: 'project',
+      icon: options?.projectIcon ?? <ProjectIcon width={20} height={20} />,
+      value: model.project ?? projectId,
+    },
+    {
+      key: 'size',
+      icon: options?.sizeIcon ?? <ModelIcon width={20} height={20} />,
+      value: formatStorageSize(model.size),
+    },
+    {
+      key: 'updatedAt',
+      icon: options?.updatedAtIcon ?? <ClockIcon width={20} height={20} />,
+      value: formatDateTime(model.updatedAt),
+    },
+  ]
+}
+
 export function getLabelsByCategory(labels: Label[] | undefined, category: Category) {
   return (labels ?? [])
     .filter(label => label.category === category && !!label.name)
@@ -103,18 +138,4 @@ export function formatStorageSize(value: string | undefined) {
     standard: 'jedec',
     round: 1,
   }) as string
-}
-
-export function formatDate(value: string | undefined) {
-  if (!value) {
-    return '-'
-  }
-
-  const date = dayjs(value)
-
-  if (!date.isValid()) {
-    return '-'
-  }
-
-  return date.format('YYYY-MM-DD')
 }
