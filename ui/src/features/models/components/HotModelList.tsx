@@ -3,17 +3,19 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { getRouteApi } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 import { modelsCatalogQueryOptions } from '@/features/models/models.query'
-import { Route } from '@/routes/(auth)/(app)/models'
 import { ModelCard } from '@/shared/components/resource-card/ModelCard.tsx'
 import { ResourceCardGrid } from '@/shared/components/ResourceCardGrid'
+
+const modelsRouteApi = getRouteApi('/(auth)/(app)/models/')
 
 export function HotModelList() {
   const { t } = useTranslation()
   const [opened, { toggle }] = useDisclosure(false)
-  const search = Route.useSearch()
+  const search = modelsRouteApi.useSearch()
   const { data } = useSuspenseQuery(modelsCatalogQueryOptions(search))
   const { items = [] } = data
   const hotModels = items.slice(0, 6)

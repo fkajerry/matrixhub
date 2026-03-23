@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -7,13 +8,15 @@ import {
   modelProjectsQueryOptions,
   modelTaskLabelsQueryOptions,
 } from '@/features/models/models.query'
-import { type ModelsCatalogSearch, Route } from '@/routes/(auth)/(app)/models'
 import { LibraryFilterPanel } from '@/shared/components/resource-filter-panel/LibraryFilterPanel'
 import { ProjectFilterPanel } from '@/shared/components/resource-filter-panel/ProjectFilterPanel'
 import { ResourceFilterPanels as SharedResourceFilterPanel } from '@/shared/components/resource-filter-panel/ResourceFilterPanels'
 import { TaskFilterPanel } from '@/shared/components/resource-filter-panel/TaskFilterPanel'
 
+import type { ModelsCatalogSearch } from '@/routes/(auth)/(app)/models'
 import type { FilterTabDefinition } from '@/shared/components/resource-filter-panel/types.ts'
+
+const modelsRouteApi = getRouteApi('/(auth)/(app)/models/')
 
 type ModelFilterSearch = Pick<ModelsCatalogSearch, 'task' | 'library' | 'project'>
 
@@ -41,7 +44,7 @@ function getModelSearchState(search: ModelFilterSearch) {
 
 export function ModelsFilterPanel() {
   const { t } = useTranslation()
-  const navigate = Route.useNavigate()
+  const navigate = modelsRouteApi.useNavigate()
 
   const {
     data: taskLabels = [],
@@ -58,7 +61,7 @@ export function ModelsFilterPanel() {
     isLoading: projectsLoading,
   } = useQuery(modelProjectsQueryOptions())
 
-  const search = Route.useSearch()
+  const search = modelsRouteApi.useSearch()
   const {
     queryTab, queryValue,
   } = getModelSearchState(search)

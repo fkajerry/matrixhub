@@ -1,10 +1,11 @@
 import { Box } from '@mantine/core'
+import { getRouteApi } from '@tanstack/react-router'
 import Markdown from 'react-markdown'
 
-import { Route as ModelDetailRoute } from '@/routes/(auth)/(app)/projects_.$projectId/models.$modelId/route'
+const modelDetailRouteApi = getRouteApi('/(auth)/(app)/projects_/$projectId/models/$modelId')
 
 export function ModelReadmePage() {
-  const model = ModelDetailRoute.useLoaderData()
+  const model = modelDetailRouteApi.useLoaderData()
 
   return (
     <Box pt={20}>
