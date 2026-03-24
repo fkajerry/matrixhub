@@ -23,6 +23,7 @@
     }
   },
   "validation": {
-    "required": "必填"
+    "required": "必填",
+    "fieldRequired": "{{field}}不能为空"
   }
 }

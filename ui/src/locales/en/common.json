@@ -11,6 +11,7 @@
   "colon": ": ",
   "backgroundRefreshFailed": "Background refresh failed",
   "operationFailed": "Operation failed",
+  "fieldRequired": "{{field}} is required",
   "errorPage": {
     "backToHome": "Take me back to home page",
     "404": {
