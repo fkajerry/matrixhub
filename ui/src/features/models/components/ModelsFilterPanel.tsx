@@ -1,18 +1,24 @@
-import { Models } from '@matrixhub/api-ts/v1alpha1/model.pb.ts'
-import { Projects } from '@matrixhub/api-ts/v1alpha1/project.pb.ts'
 import { useQuery } from '@tanstack/react-query'
+import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { type ModelsSearch, Route } from '@/routes/(auth)/(app)/models'
+import {
+  modelLibraryLabelsQueryOptions,
+  modelProjectsQueryOptions,
+  modelTaskLabelsQueryOptions,
+} from '@/features/models/models.query'
 import { LibraryFilterPanel } from '@/shared/components/resource-filter-panel/LibraryFilterPanel'
 import { ProjectFilterPanel } from '@/shared/components/resource-filter-panel/ProjectFilterPanel'
 import { ResourceFilterPanels as SharedResourceFilterPanel } from '@/shared/components/resource-filter-panel/ResourceFilterPanels'
 import { TaskFilterPanel } from '@/shared/components/resource-filter-panel/TaskFilterPanel'
 
+import type { ModelsCatalogSearch } from '@/routes/(auth)/(app)/models'
 import type { FilterTabDefinition } from '@/shared/components/resource-filter-panel/types.ts'
 
-type ModelFilterSearch = Pick<ModelsSearch, 'task' | 'library' | 'project'>
+const modelsRouteApi = getRouteApi('/(auth)/(app)/models/')
+
+type ModelFilterSearch = Pick<ModelsCatalogSearch, 'task' | 'library' | 'project'>
 
 type ModelFilterTab = keyof ModelFilterSearch
 
@@ -38,45 +44,24 @@ function getModelSearchState(search: ModelFilterSearch) {
 
 export function ModelsFilterPanel() {
   const { t } = useTranslation()
-  const navigate = Route.useNavigate()
+  const navigate = modelsRouteApi.useNavigate()
 
   const {
     data: taskLabels = [],
     isLoading: taskLabelsLoading,
-  } = useQuery({
-    queryKey: ['Models.ListModelTaskLabels'],
-    queryFn: async () => {
-      const response = await Models.ListModelTaskLabels({})
-
-      return response.items ?? []
-    },
-  })
+  } = useQuery(modelTaskLabelsQueryOptions())
 
   const {
     data: libraryLabels = [],
     isLoading: libraryLabelsLoading,
-  } = useQuery({
-    queryKey: ['Models.ListModelFrameLabels'],
-    queryFn: async () => {
-      const response = await Models.ListModelFrameLabels({})
-
-      return response.items ?? []
-    },
-  })
+  } = useQuery(modelLibraryLabelsQueryOptions())
 
   const {
     data: projects = [],
     isLoading: projectsLoading,
-  } = useQuery({
-    queryKey: ['Models.ListProjects'],
-    queryFn: async () => {
-      const response = await Projects.ListProjects({})
+  } = useQuery(modelProjectsQueryOptions())
 
-      return response.projects ?? []
-    },
-  })
-
-  const search = Route.useSearch()
+  const search = modelsRouteApi.useSearch()
   const {
     queryTab, queryValue,
   } = getModelSearchState(search)

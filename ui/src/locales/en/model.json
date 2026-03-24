@@ -23,7 +23,9 @@
       "title": "Delete Model",
       "warning": "This action cannot be undone. This will permanently delete the {{name}} model repository and all of its files, including weights.",
       "confirmation": "Please enter {{name}}",
-      "action": "Delete Model"
+      "action": "Delete Model",
+      "success": "Model deleted successfully",
+      "error": "Model deletion failed"
     },
     "recommended": {
       "title": "Featured Model",

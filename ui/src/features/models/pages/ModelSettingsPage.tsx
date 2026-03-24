@@ -2,13 +2,12 @@ import {
   Alert, Button, Checkbox, rem, Stack, Text, TextInput,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { Models } from '@matrixhub/api-ts/v1alpha1/model.pb.ts'
 import { IconAlertTriangle, IconTrash } from '@tabler/icons-react'
-import { useNavigate } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Route as ModelsRoute } from '@/routes/(auth)/(app)/models'
+import { deleteModelMutationOptions } from '@/features/models/models.mutation'
 import { ModalWrapper } from '@/shared/components/ModalWrapper'
 
 interface ModelSettingsPageProps {
@@ -20,11 +19,11 @@ export function ModelSettingsPage({
   projectId, modelId,
 }: ModelSettingsPageProps) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [opened, {
     open, close,
   }] = useDisclosure(false)
   const [inputValue, setInputValue] = useState('')
+  const deleteMutation = useMutation(deleteModelMutationOptions())
 
   const fullName = `${projectId}/${modelId}`
 
@@ -33,18 +32,12 @@ export function ModelSettingsPage({
   }
 
   const handleDelete = async () => {
-    try {
-      await Models.DeleteModel({
-        project: projectId,
-        name: modelId,
-      })
+    await deleteMutation.mutateAsync({
+      project: projectId,
+      name: modelId,
+    })
 
-      // Fixme: confirm navigation to which page
-      navigate({ to: ModelsRoute.to })
-    } catch (e) {
-      // TODO: handle error noty
-      console.error(e)
-    }
+    // Fixme: confirm navigation to which page
   }
 
   return (
@@ -111,7 +104,8 @@ export function ModelSettingsPage({
         </Stack>
 
         <Button
-          disabled={inputValue !== fullName}
+          disabled={inputValue !== fullName || deleteMutation.isPending}
+          loading={deleteMutation.isPending}
           leftSection={<IconTrash size={16} />}
           color="var(--mantine-color-red-6)"
           onClick={handleDelete}

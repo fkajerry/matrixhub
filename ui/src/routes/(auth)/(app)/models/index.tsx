@@ -1,45 +1,29 @@
-import { Models } from '@matrixhub/api-ts/v1alpha1/model.pb.ts'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { PAGE_SIZE } from '@/features/models/models.query'
+import { modelsCatalogQueryOptions } from '@/features/models/models.query'
 import { ModelsPage } from '@/features/models/pages/ModelsPage'
 
 const modelsSearchSchema = z.object({
-  q: z.string().transform(v => v.trim()).optional(),
+  q: z.string().trim().optional(),
   sort: z.literal('updatedAt').optional().catch('updatedAt'),
   order: z.enum(['asc', 'desc']).optional().catch('desc'),
-  page: z.coerce.number().int().positive().optional(),
+  page: z.coerce.number().int().positive().optional().catch(1),
   task: z.string().optional(),
   library: z.string().optional(),
   project: z.string().optional(),
 })
 
-export type ModelsSearch = z.infer<typeof modelsSearchSchema>
+export type ModelsCatalogSearch = z.infer<typeof modelsSearchSchema>
 
 export const Route = createFileRoute('/(auth)/(app)/models/')({
-  component: RouteComponent,
+  component: ModelsPage,
   validateSearch: modelsSearchSchema,
-  loaderDeps: ({ search }) => search,
-  async loader({ deps: search }) {
-    const sortField = search.sort ?? 'updatedAt'
-    const sortOrder = search.order ?? 'desc'
-    const page = search.page ?? 1
-    const sort = sortField === 'updatedAt' && sortOrder === 'asc'
-      ? 'updated_at_asc'
-      : 'updated_at_desc'
-
-    return await Models.ListModels({
-      labels: (search.task ?? search.library)?.split(','),
-      project: search.project,
-      search: search.q || undefined,
-      sort,
-      page,
-      pageSize: PAGE_SIZE,
-    })
+  loaderDeps: ({ search }) => ({ search }),
+  async loader({
+    context: { queryClient },
+    deps: { search },
+  }) {
+    await queryClient.ensureQueryData(modelsCatalogQueryOptions(search))
   },
 })
-
-function RouteComponent() {
-  return <ModelsPage />
-}

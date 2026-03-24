@@ -7,11 +7,15 @@ import {
   Text,
 } from '@mantine/core'
 import { IconClock } from '@tabler/icons-react'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { getRouteApi } from '@tanstack/react-router'
 import { startTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PAGE_SIZE } from '@/features/models/models.query'
-import { Route } from '@/routes/(auth)/(app)/models'
+import {
+  modelsCatalogQueryOptions,
+  PAGE_SIZE,
+} from '@/features/models/models.query'
 import { Pagination } from '@/shared/components/Pagination'
 import { ModelCard } from '@/shared/components/resource-card/ModelCard.tsx'
 import { ResourceCardGrid } from '@/shared/components/ResourceCardGrid'
@@ -21,18 +25,20 @@ import {
   type SortDropdownOption,
 } from '@/shared/components/SortDropdown'
 
+const modelsRouteApi = getRouteApi('/(auth)/(app)/models/')
+
 export function AllModelList() {
   const { t } = useTranslation()
-  const navigate = Route.useNavigate()
-  const search = Route.useSearch()
+  const navigate = modelsRouteApi.useNavigate()
+  const search = modelsRouteApi.useSearch()
+  const { data } = useSuspenseQuery(modelsCatalogQueryOptions(search))
+  const {
+    q: query = '', sort: sortField = 'updatedAt', order: sortOrder = 'desc', page = 1,
+  } = search
   const {
     items = [],
     pagination,
-  } = Route.useLoaderData()
-  const query = search.q ?? ''
-  const sortField = search.sort ?? 'updatedAt'
-  const sortOrder = search.order ?? 'desc'
-  const page = search.page ?? 1
+  } = data
 
   const total = pagination?.total ?? 0
   const totalPages = pagination?.pages

@@ -23,7 +23,9 @@
       "title": "删除模型",
       "warning": "此操作无法撤销。这将永久删除 {{name}} 模型库及其所有文件，包括权重。",
       "confirmation": "请输入 {{name}}",
-      "action": "删除模型"
+      "action": "删除模型",
+      "success": "模型删除成功",
+      "error": "模型删除失败"
     },
     "recommended": {
       "title": "热门模型",
