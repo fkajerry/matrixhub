@@ -5,17 +5,17 @@ import { FileType } from '@matrixhub/api-ts/v1alpha1/model.pb.ts'
 import {
   IconClockHour4, IconFile, IconFolderCode,
 } from '@tabler/icons-react'
-import { getRouteApi, useNavigate } from '@tanstack/react-router'
+import { getRouteApi, Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 import { ModelRevisionSelect } from '@/features/models/components/ModelRevisionSelect.tsx'
 import { useModelCommits, useModelTree } from '@/features/models/models.query.ts'
 import { PathBreadcrumbs } from '@/shared/components/PathBreadcrumbs.tsx'
 
+const { useParams } = getRouteApi('/(auth)/(app)/projects_/$projectId/models/$modelId/tree/$ref/$')
+
 export function ModelTreePage() {
   const { t } = useTranslation()
-  const { useParams } = getRouteApi('/(auth)/(app)/projects_/$projectId/models/$modelId/tree/$ref/$')
-  const navigate = useNavigate()
 
   const {
     projectId, modelId, ref, _splat: treePath,
@@ -43,39 +43,36 @@ export function ModelTreePage() {
           <PathBreadcrumbs
             name={modelId}
             treePath={treePath}
-            onPathClick={(nextPath) => {
-              void navigate({
-                to: '.',
-                params: {
-                  projectId,
-                  modelId,
-                  ref,
-                  _splat: nextPath,
-                },
-              })
-            }}
-          />
-        </Group>
-
-        <Button
-          size="xs"
-          color="cyan"
-          variant="light"
-          radius="xl"
-          leftSection={<IconClockHour4 size={16} />}
-          onClick={() => {
-            void navigate({
-              to: '/projects/$projectId/models/$modelId/commits/$ref',
+            getPathLinkProps={nextPath => ({
+              to: '.',
               params: {
                 projectId,
                 modelId,
                 ref,
+                _splat: nextPath,
               },
-            })
+            })}
+          />
+        </Group>
+
+        <Link
+          to="/projects/$projectId/models/$modelId/commits/$ref"
+          params={{
+            projectId,
+            modelId,
+            ref,
           }}
         >
-          { t('model.detail.history', { count: data?.pagination?.total }) }
-        </Button>
+          <Button
+            size="xs"
+            color="cyan"
+            variant="light"
+            radius="xl"
+            leftSection={<IconClockHour4 size={16} />}
+          >
+            { t('model.detail.history', { count: data?.pagination?.total ?? 0 }) }
+          </Button>
+        </Link>
       </Flex>
 
       { treePath }

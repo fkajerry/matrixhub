@@ -2,14 +2,12 @@ import {
   Flex, Group,
   Stack,
 } from '@mantine/core'
-import { getRouteApi } from '@tanstack/react-router'
+import { getRouteApi, linkOptions } from '@tanstack/react-router'
 
 import { ModelRevisionSelect } from '@/features/models/components/ModelRevisionSelect.tsx'
 import { useModelCommits } from '@/features/models/models.query'
 import { CommitsTable } from '@/shared/components/CommitsTable'
 import { PathBreadcrumbs } from '@/shared/components/PathBreadcrumbs.tsx'
-
-import type { Commit } from '@matrixhub/api-ts/v1alpha1/model.pb'
 
 const {
   useNavigate, useParams, useSearch,
@@ -38,21 +36,6 @@ export function ModelCommitsPage() {
     })
   }
 
-  const onDetailClick = (commit: Commit) => {
-    if (!commit.id) {
-      return
-    }
-
-    void navigate({
-      to: '/projects/$projectId/models/$modelId/commit/$commitId',
-      params: {
-        projectId,
-        modelId,
-        commitId: commit.id,
-      },
-    })
-  }
-
   return (
     <Stack pt="sm" pb="lg">
       <Flex justify="space-between" align="center" wrap="nowrap">
@@ -65,16 +48,14 @@ export function ModelCommitsPage() {
 
           <PathBreadcrumbs
             name={modelId}
-            onPathClick={() => {
-              void navigate({
-                to: '/projects/$projectId/models/$modelId/tree/$ref/$',
-                params: {
-                  projectId,
-                  modelId,
-                  ref,
-                },
-              })
-            }}
+            getPathLinkProps={() => linkOptions({
+              to: '/projects/$projectId/models/$modelId/tree/$ref/$',
+              params: {
+                projectId,
+                modelId,
+                ref,
+              },
+            })}
           />
         </Group>
 
@@ -92,7 +73,14 @@ export function ModelCommitsPage() {
         page={page}
         loading={isPending}
         onPageChange={onPageChange}
-        onDetailClick={onDetailClick}
+        getDetailLinkProps={commit => linkOptions({
+          to: '/projects/$projectId/models/$modelId/commit/$commitId',
+          params: {
+            projectId,
+            modelId,
+            commitId: commit.id as string,
+          },
+        })}
       />
     </Stack>
   )

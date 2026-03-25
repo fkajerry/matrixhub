@@ -1,17 +1,16 @@
 import {
-  type ListModelCommitsRequest, type GetModelTreeRequest, Models,
+  type GetModelTreeRequest, type ListModelCommitsRequest, Models,
 } from '@matrixhub/api-ts/v1alpha1/model.pb'
 import { Projects } from '@matrixhub/api-ts/v1alpha1/project.pb'
 import {
-  keepPreviousData,
-  queryOptions,
-  useQuery,
+  keepPreviousData, queryOptions, useQuery,
 } from '@tanstack/react-query'
+
+import { MODEL_COMMITS_PAGE_SIZE } from '@/utils/constants.ts'
 
 import type { ModelsCatalogSearch } from '@/routes/(auth)/(app)/models'
 
 export const PAGE_SIZE = 6
-export const MODEL_COMMITS_PAGE_SIZE = 10
 
 export type ModelsSortField = 'updatedAt'
 

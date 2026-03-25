@@ -1,38 +1,40 @@
 import {
-  Anchor,
   Breadcrumbs,
   Text,
 } from '@mantine/core'
+import { type LinkComponentProps } from '@tanstack/react-router'
+
+import AnchorLink from '@/shared/components/AnchorLink.tsx'
 
 export interface ModelPathBreadcrumbsProps {
   name: string
   treePath?: string
-  onPathClick?: (path: string) => void
+  getPathLinkProps: (path: string) => LinkComponentProps
 }
 
 export function PathBreadcrumbs({
   name,
   treePath,
-  onPathClick,
+  getPathLinkProps,
 }: ModelPathBreadcrumbsProps) {
   const pathSegments = treePath?.split('/').filter(Boolean) ?? []
+  const rootLinkProps = getPathLinkProps('')
 
   return (
     <Breadcrumbs separator="/" separatorMargin="xs">
-      <Anchor
+      <AnchorLink
         c="gray.9"
-        onClick={(event) => {
-          event.preventDefault()
-          onPathClick?.('')
-        }}
+        underline="hover"
+        {...rootLinkProps}
       >
         {name}
-      </Anchor>
+      </AnchorLink>
 
       {pathSegments.map((segment, index) => {
         const pathToSegment = pathSegments.slice(0, index + 1).join('/')
+        const pathLinkProps = getPathLinkProps?.(pathToSegment)
 
-        if (!onPathClick || index === pathSegments.length - 1) {
+        if (!pathLinkProps || index === pathSegments.length - 1) {
           return (
             <Text key={pathToSegment} c="gray.9">
               {segment}
@@ -41,16 +43,14 @@ export function PathBreadcrumbs({
         }
 
         return (
-          <Anchor
-            key={pathToSegment}
+          <AnchorLink
             c="gray.9"
-            onClick={(event) => {
-              event.preventDefault()
-              onPathClick(pathToSegment)
-            }}
+            underline="hover"
+            key={pathToSegment}
+            {...pathLinkProps}
           >
             {segment}
-          </Anchor>
+          </AnchorLink>
         )
       })}
     </Breadcrumbs>

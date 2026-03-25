@@ -25,9 +25,5 @@ export const Route = createFileRoute(
       page: deps.page,
     }))
   },
-  component: RouteComponent,
+  component: ModelCommitsPage,
 })
-
-function RouteComponent() {
-  return <ModelCommitsPage />
-}

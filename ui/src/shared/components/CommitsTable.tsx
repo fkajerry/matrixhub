@@ -1,10 +1,11 @@
 import {
-  Anchor,
   Group,
   Text,
 } from '@mantine/core'
+import { type LinkComponentProps } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
+import AnchorLink from '@/shared/components/AnchorLink.tsx'
 import { CopyValueButton } from '@/shared/components/CopyValueButton'
 import { DataTable } from '@/shared/components/DataTable'
 import { formatDateTime } from '@/shared/utils/date'
@@ -19,7 +20,7 @@ interface CommitsTableProps {
   page: number
   loading?: boolean
   onPageChange: (page: number) => void
-  onDetailClick?: (commit: Commit) => void
+  getDetailLinkProps: (commit: Commit) => LinkComponentProps
 }
 
 type CommitCellProps = Parameters<NonNullable<MRT_ColumnDef<Commit>['Cell']>>[0]
@@ -41,13 +42,13 @@ function CommitHashCell({ row }: CommitCellProps) {
 
   return (
     <Group gap="xs" wrap="nowrap">
-      <Text size="sm" ff="monospace" truncate>
+      <Text size="sm" truncate>
         {commitId}
       </Text>
       <CopyValueButton
         value={commitId}
         iconSize={12}
-        color="gray-9"
+        color="var(--mantine-color-gray-9)"
       />
     </Group>
   )
@@ -70,24 +71,24 @@ function CommitDetailCell({
 }: CommitCellProps) {
   const { t } = useTranslation()
   const {
-    onDetailClick,
-  } = table.options.meta as {
-    onDetailClick?: (commit: Commit) => void
-  }
+    getDetailLinkProps,
+  } = table.options.meta as Pick<CommitsTableProps, 'getDetailLinkProps'>
   const commitId = row.original.id
 
   if (!commitId) {
     return <Text size="sm">-</Text>
   }
 
+  const detailLinkProps = getDetailLinkProps(row.original)
+
   return (
-    <Anchor
+    <AnchorLink
       size="sm"
       underline="never"
-      onClick={() => onDetailClick?.(row.original)}
+      {...detailLinkProps}
     >
       {t('shared.commitsTable.actions.detail')}
-    </Anchor>
+    </AnchorLink>
   )
 }
 
@@ -97,7 +98,7 @@ export function CommitsTable({
   page,
   loading,
   onPageChange,
-  onDetailClick,
+  getDetailLinkProps,
 }: CommitsTableProps) {
   const { t } = useTranslation()
 
@@ -140,7 +141,7 @@ export function CommitsTable({
       onPageChange={onPageChange}
       tableOptions={{
         meta: {
-          onDetailClick,
+          getDetailLinkProps,
         },
       }}
     />

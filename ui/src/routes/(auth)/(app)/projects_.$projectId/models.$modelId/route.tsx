@@ -64,7 +64,7 @@ function ModelDetailLayout() {
       params: {
         projectId,
         modelId,
-        ref: model.defaultBranch ?? '',
+        ref: model.defaultBranch ?? 'main',
       },
     },
     ...(hasProjectRole

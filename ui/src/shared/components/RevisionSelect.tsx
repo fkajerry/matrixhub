@@ -70,6 +70,7 @@ export function RevisionSelect({
       value={selectedRevisionValue}
       data={revisionOptions}
       disabled={revisionOptions.length === 0}
+      searchable
       onChange={(value, option) => {
         if (!value || !onRevisionChange) {
           return
