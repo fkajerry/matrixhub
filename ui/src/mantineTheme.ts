@@ -1,14 +1,55 @@
 import {
   Alert,
   createTheme,
+  Modal,
   rem,
   Tabs,
 } from '@mantine/core'
 import { InputWrapper, type CSSVariablesResolver } from '@mantine/core'
 
+const modalSizeMap = {
+  xs: rem(300),
+  sm: rem(390),
+  md: rem(480),
+} as const
+
+const isMappedModalSize = (size: unknown): size is keyof typeof modalSizeMap => (
+  typeof size === 'string' && Object.prototype.hasOwnProperty.call(modalSizeMap, size)
+)
+
 export const mantineTheme = createTheme({
   primaryColor: 'cyan',
   components: {
+    Modal: Modal.extend({
+      vars: (_, props) => ({
+        root: {
+          '--modal-size': isMappedModalSize(props.size) ? modalSizeMap[props.size] : undefined,
+        },
+        content: {
+          '--paper-radius': rem(12),
+        },
+      }),
+    }),
+    ModalHeader: Modal.Header.extend({
+      defaultProps: {
+        px: 'lg',
+        py: 'md',
+      },
+    }),
+    ModalBody: Modal.Body.extend({
+      defaultProps: {
+        p: 'lg',
+        pt: 0,
+      },
+    }),
+    Tabs: Tabs.extend({
+      vars: () => ({
+        root: {},
+        list: {
+          '--tabs-list-gap': rem(20),
+        },
+      }),
+    }),
     TabsTab: Tabs.Tab.extend({
       defaultProps: {
         lh: rem(20),
@@ -39,7 +80,6 @@ export const cssVariablesResolver: CSSVariablesResolver = () => ({
     '--app-size-icon-md': rem(16),
     '--app-size-icon-sm': rem(16),
     '--app-size-radius-mmd': rem(6),
-    '--tabs-list-gap': rem(20),
   },
   light: {
     '--mantine-color-text': 'var(--mantine-color-gray-9)',

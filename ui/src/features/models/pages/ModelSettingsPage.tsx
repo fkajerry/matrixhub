@@ -62,6 +62,7 @@ export function ModelSettingsPage({
 
         <ModalWrapper
           type="info"
+          size="sm"
           title={t('model.settings.recommended.label')}
           opened={opened}
           onClose={close}
