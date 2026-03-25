@@ -5,6 +5,7 @@
   "fromProject": "Project",
   "modelSize": "Size",
   "noResults": "No results",
+  "required": "Required",
   "confirm": "Confirm",
   "cancel": "Cancel",
   "colon": ": ",
@@ -20,5 +21,8 @@
       "title": "Access denied",
       "description": "Sorry, your account does not have sufficient permissions to access this page."
     }
+  },
+  "validation": {
+    "required": "Required"
   }
 }
