@@ -76,8 +76,8 @@ export interface DataTableProps<TData extends MRT_RowData> extends DataTableTool
 
   // --- Pagination ---
   pagination?: PaginationData
-  page: number
-  onPageChange: (page: number) => void
+  page?: number
+  onPageChange?: (page: number) => void
 
   // --- Empty state ---
   emptyTitle?: ReactNode
@@ -159,7 +159,7 @@ export function DataTable<TData extends MRT_RowData>({
   data,
   columns,
   pagination,
-  page,
+  page = 1,
   emptyTitle = '',
   emptyDescription = '',
   onPageChange,
@@ -391,12 +391,14 @@ export function DataTable<TData extends MRT_RowData>({
         </Center>
       )}
 
-      <Pagination
-        total={pagination?.total ?? 0}
-        totalPages={totalPages}
-        page={page}
-        onPageChange={onPageChange}
-      />
+      {onPageChange && (
+        <Pagination
+          total={pagination?.total ?? 0}
+          totalPages={totalPages}
+          page={page}
+          onPageChange={onPageChange}
+        />
+      )}
     </Stack>
   )
 }

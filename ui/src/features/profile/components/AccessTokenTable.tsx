@@ -3,7 +3,6 @@ import {
   Box,
   Group,
   Menu,
-  Table,
   Text,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
@@ -19,11 +18,68 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { profileKeys } from '@/features/profile/profile.query'
+import { DataTable } from '@/shared/components/DataTable'
 import { ModalWrapper } from '@/shared/components/ModalWrapper'
 import { formatDateTime } from '@/shared/utils/date'
 
+import type {
+  MRT_ColumnDef,
+  MRT_Row,
+} from 'mantine-react-table'
+
 interface AccessTokenTableProps {
   tokens: AccessToken[]
+}
+
+const StatusCell = ({ row }: { row: MRT_Row<AccessToken> }) => {
+  const { t } = useTranslation()
+
+  const statusColor = {
+    [AccessTokenStatus.ACCESS_TOKEN_STATUS_VALID]: 'teal.6',
+    [AccessTokenStatus.ACCESS_TOKEN_STATUS_EXPIRED]: 'red.6',
+    [AccessTokenStatus.ACCESS_TOKEN_STATUS_UNKNOWN]: 'gray.5',
+  }
+
+  const status = row.original.status ?? AccessTokenStatus.ACCESS_TOKEN_STATUS_UNKNOWN
+
+  return (
+    <Group gap={6}>
+      <Box w={12} h={12} bdrs="50%" bg={statusColor[status]} />
+      <Text size="sm">{t(`profile.status.${status}`)}</Text>
+    </Group>
+  )
+}
+
+type TableCellProps = Parameters<NonNullable<MRT_ColumnDef<AccessToken>['Cell']>>[0]
+
+const ActionCell = ({
+  row, table,
+}: TableCellProps) => {
+  const { t } = useTranslation()
+
+  const handleDeleteOpen = (
+    table.options.meta as { handleDeleteOpen?: (token: AccessToken) => void } | undefined
+  )?.handleDeleteOpen
+
+  return (
+    <Menu position="bottom-end">
+      <Menu.Target>
+        <ActionIcon variant="transparent" c="gray.6" size={20}>
+          <IconDotsVertical />
+        </ActionIcon>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item
+          color="red"
+          leftSection={<IconTrash size={14} />}
+          onClick={() => handleDeleteOpen?.(row.original)}
+          styles={{ itemSection: { marginInlineEnd: 4 } }}
+        >
+          {t('profile.deleteToken')}
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  )
 }
 
 export function AccessTokenTable({ tokens }: AccessTokenTableProps) {
@@ -65,91 +121,43 @@ export function AccessTokenTable({ tokens }: AccessTokenTableProps) {
     return formatDateTime(expiredAt)
   }
 
-  const statusColor = {
-    [AccessTokenStatus.ACCESS_TOKEN_STATUS_VALID]: 'teal.6',
-    [AccessTokenStatus.ACCESS_TOKEN_STATUS_EXPIRED]: 'yellow.6',
-    [AccessTokenStatus.ACCESS_TOKEN_STATUS_UNKNOWN]: 'gray.5',
-  }
+  const columns: MRT_ColumnDef<AccessToken>[] = [
+    {
+      accessorKey: 'name',
+      header: t('profile.tokenName'),
+    },
+    {
+      accessorKey: 'status',
+      header: t('profile.tokenStatus'),
+      Cell: StatusCell,
+    },
+    {
+      accessorKey: 'expiredAt',
+      header: t('profile.tokenExpiredAt'),
+      Cell: ({ row }) => formatExpiredAt(row.original.expiredAt),
+    },
+    {
+      accessorKey: 'createdAt',
+      header: t('profile.tokenCreatedAt'),
+      Cell: ({ row }) => formatDateTime(row.original.createdAt),
+    },
+    {
+      id: 'actions',
+      enableSorting: false,
+      header: t('routes.projects.table.actions'),
+      Cell: ActionCell,
+    },
+  ]
 
   return (
     <>
-      <Box>
-        <Table highlightOnHover>
-          <Table.Thead bg="gray.0">
-            <Table.Tr>
-              <Table.Th>{t('profile.tokenName')}</Table.Th>
-              <Table.Th>{t('profile.tokenStatus')}</Table.Th>
-              <Table.Th>{t('profile.tokenExpiredAt')}</Table.Th>
-              <Table.Th>{t('profile.tokenCreatedAt')}</Table.Th>
-              <Table.Th w={48} />
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {tokens.length === 0
-              ? (
-                  <Table.Tr>
-                    <Table.Td
-                      colSpan={5}
-                      ta="center"
-                    >
-                      <Text
-                        size="sm"
-                        c="dimmed"
-                        py="xl"
-                      >
-                        {t('common.noResults')}
-                      </Text>
-                    </Table.Td>
-                  </Table.Tr>
-                )
-              : tokens.map((token: AccessToken) => (
-                  <Table.Tr key={token.id}>
-                    <Table.Td>
-                      <Text size="sm">{token.name}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Group gap={6}>
-                        <Box
-                          w={12}
-                          h={12}
-                          bdrs="50%"
-                          bg={statusColor[token.status ?? AccessTokenStatus.ACCESS_TOKEN_STATUS_UNKNOWN]}
-                        />
-                        <Text size="sm">
-                          {t(`profile.status.${token.status ?? AccessTokenStatus.ACCESS_TOKEN_STATUS_UNKNOWN}`)}
-                        </Text>
-                      </Group>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text size="sm">{formatExpiredAt(token.expiredAt)}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text size="sm">{formatDateTime(token.createdAt)}</Text>
-                    </Table.Td>
-                    <Table.Td>
-                      <Menu position="bottom-end">
-                        <Menu.Target>
-                          <ActionIcon variant="transparent" c="gray.6" size={20}>
-                            <IconDotsVertical />
-                          </ActionIcon>
-                        </Menu.Target>
-                        <Menu.Dropdown>
-                          <Menu.Item
-                            color="red"
-                            leftSection={<IconTrash size={14} />}
-                            onClick={() => handleDeleteOpen(token)}
-                            styles={{ itemSection: { marginInlineEnd: 4 } }}
-                          >
-                            {t('profile.deleteToken')}
-                          </Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
-                    </Table.Td>
-                  </Table.Tr>
-                ))}
-          </Table.Tbody>
-        </Table>
-      </Box>
+      <DataTable
+        columns={columns}
+        data={tokens}
+        tableOptions={{
+          meta: { handleDeleteOpen },
+        }}
+      />
 
       <ModalWrapper
         type="danger"

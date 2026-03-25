@@ -24,6 +24,8 @@
   },
   "validation": {
     "required": "必填",
-    "fieldRequired": "{{field}}不能为空"
+    "fieldRequired": "{{field}}不能为空",
+    "minLength": "{{field}}长度不能少于{{min}}",
+    "maxLength": "{{field}}长度不能超过{{max}}"
   }
 }

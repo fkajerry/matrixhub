@@ -3,12 +3,14 @@ import {
   Alert,
   Button,
   Group,
+  Radio,
   Stack,
   Text,
   TextInput,
 } from '@mantine/core'
+import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
-import { CurrentUser } from '@matrixhub/api-ts/v1alpha1/current_user.pb'
+import { CurrentUser, type CreateAccessTokenRequest } from '@matrixhub/api-ts/v1alpha1/current_user.pb'
 import {
   IconInfoCircle,
   IconKey,
@@ -16,6 +18,7 @@ import {
 } from '@tabler/icons-react'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import z from 'zod'
@@ -24,6 +27,17 @@ import { AccessTokenTable } from '@/features/profile/components/AccessTokenTable
 import { profileKeys, useAccessTokens } from '@/features/profile/profile.query'
 import { ModalWrapper } from '@/shared/components/ModalWrapper'
 
+const validityRadios = [
+  {
+    value: 'never',
+    label: 'profile.expireNever',
+  },
+  {
+    value: 'custom',
+    label: 'profile.expireCustom',
+  },
+] as const
+
 export function AccessTokenPage() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -31,25 +45,27 @@ export function AccessTokenPage() {
   const {
     data, isFetching,
   } = useAccessTokens()
-
   const tokens = data?.items ?? []
 
   const [hintVisible, setHintVisible] = useState(true)
-
-  const handleRefresh = () => {
-    void queryClient.invalidateQueries({ queryKey: profileKeys.accessTokens })
-  }
-
-  // Create token
-
   const [createOpened, {
     open: openCreate, close: closeCreate,
   }] = useDisclosure(false)
+  const [validityValue, setValidityValue] = useState<'never' | 'custom'>('never')
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: profileKeys.accessTokens })
+  }
+
+  const nameSchema = z.string().min(1, { error: t('common.validation.fieldRequired', { field: t('profile.tokenName') }) })
+
+  const expiredAtSchema = z.string().min(1, { error: t('common.validation.fieldRequired', { field: t('profile.expireTime') }) })
+    .refine(value => dayjs(value).startOf('day').isAfter(dayjs().startOf('day')), { error: t('profile.expireTimeError') })
 
   const {
     mutate: createToken, isPending: isCreating,
   } = useMutation({
-    mutationFn: (value: string) => CurrentUser.CreateAccessToken({ name: value }),
+    mutationFn: (value: CreateAccessTokenRequest) => CurrentUser.CreateAccessToken(value),
     meta: {
       successMessage: t('profile.tokenCreated'),
       invalidates: [profileKeys.accessTokens],
@@ -59,22 +75,31 @@ export function AccessTokenPage() {
     },
   })
 
-  const nameSchema = z.string().min(1, { error: t('common.validation.fieldRequired', { field: t('profile.tokenName') }) })
-
-  const {
-    reset, handleSubmit, Field,
-  } = useForm({
+  const form = useForm({
     defaultValues: {
-      tokenName: '',
+      name: '',
+      expiredAt: dayjs().add(1, 'day').format('YYYY-MM-DD'),
     },
     onSubmit: ({ value }) => {
-      createToken(value.tokenName)
+      createToken({
+        ...value,
+        expiredAt: validityValue === 'custom' ? String(dayjs(value.expiredAt).unix()) : '',
+      })
     },
   })
 
+  const handleValidityChange = (v: string) => {
+    setValidityValue(v as 'never' | 'custom')
+
+    if (v === 'never') {
+      form.resetField('expiredAt')
+    }
+  }
+
   const handleCreateClose = () => {
     closeCreate()
-    reset()
+    form.reset()
+    setValidityValue('never')
   }
 
   return (
@@ -118,12 +143,12 @@ export function AccessTokenPage() {
         title={t('profile.createToken')}
         opened={createOpened}
         onClose={handleCreateClose}
-        onConfirm={handleSubmit}
+        onConfirm={form.handleSubmit}
         confirmLoading={isCreating}
         size="sm"
       >
-        <Field
-          name="tokenName"
+        <form.Field
+          name="name"
           validators={{ onChange: nameSchema }}
         >
           {({
@@ -137,7 +162,43 @@ export function AccessTokenPage() {
               error={state.meta.errors[0]?.message}
             />
           )}
-        </Field>
+        </form.Field>
+        <Radio.Group
+          label={t('profile.validity')}
+          name="validity"
+          value={validityValue}
+          onChange={handleValidityChange}
+        >
+          <Group mt="xs">
+            {validityRadios.map(radio => (
+              <Radio
+                key={radio.value}
+                value={radio.value}
+                label={t(radio.label)}
+              />
+            ))}
+          </Group>
+        </Radio.Group>
+        {validityValue === 'custom' && (
+          <form.Field
+            name="expiredAt"
+            validators={{ onChange: expiredAtSchema }}
+          >
+            {({
+              state, handleChange,
+            }) => (
+              <DatePickerInput
+                label={t('profile.expireTime')}
+                valueFormat="YYYY-MM-DD"
+                value={state.value}
+                required
+                highlightToday
+                onChange={e => handleChange(e ?? '')}
+                error={state.meta.errors[0]?.message}
+              />
+            )}
+          </form.Field>
+        )}
       </ModalWrapper>
     </Stack>
   )

@@ -32,7 +32,17 @@ export function SecurityPage() {
 
   const fieldSchemas = {
     oldPassword: z.string().min(1, { error: t('common.validation.fieldRequired', { field: t('profile.oldPassword') }) }),
-    newPassword: z.string().min(1, { error: t('common.validation.fieldRequired', { field: t('profile.newPassword') }) }),
+    newPassword: z.string()
+      .min(8, { error: t('common.validation.minLength', {
+        field: t('profile.newPassword'),
+        min: 8,
+      }) })
+      .max(20, { error: t('common.validation.maxLength', {
+        field: t('profile.newPassword'),
+        max: 20,
+      }) })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, { message: t('profile.passwordComplexity') }),
+
     confirmNewPassword: z.string().min(1, { error: t('common.validation.fieldRequired', { field: t('profile.confirmNewPassword') }) }),
   }
 
@@ -86,14 +96,7 @@ export function SecurityPage() {
         label={t('profile.password')}
         w={200}
         readOnly
-        withAsterisk
         disabled
-        labelProps={{
-          style: {
-            lineHeight: '20px',
-            marginBottom: '8px',
-          },
-        }}
         value="********"
       />
 

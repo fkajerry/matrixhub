@@ -18,7 +18,7 @@
   "tokenCreatedAt": "创建时间",
   "status": {
     "ACCESS_TOKEN_STATUS_VALID": "有效",
-    "ACCESS_TOKEN_STATUS_EXPIRED": "已过期",
+    "ACCESS_TOKEN_STATUS_EXPIRED": "失效",
     "ACCESS_TOKEN_STATUS_UNKNOWN": "未知"
   },
   "tokenPermanent": "永久",
@@ -26,5 +26,11 @@
   "deleteToken": "删除密钥",
   "deleteTokenConfirm": "确认删除密钥 {{name}} 吗？此操作不可撤销。",
   "tokenCreated": "密钥创建成功",
-  "tokenDeleted": "密钥删除成功"
+  "validity": "有效期",
+  "tokenDeleted": "密钥删除成功",
+  "expireNever": "永久",
+  "expireCustom": "自定义",
+  "expireTime": "过期时间",
+  "expireTimeError": "过期时间必须晚于当前时间",
+  "passwordComplexity": "密码必须包含至少一个大写字母、一个小写字母和一个数字。"
 }

@@ -3,10 +3,12 @@ import {
   Anchor,
   createTheme,
   Modal,
+  Input,
+  PasswordInput,
   rem,
   Tabs,
 } from '@mantine/core'
-import { InputWrapper, type CSSVariablesResolver } from '@mantine/core'
+import { type CSSVariablesResolver } from '@mantine/core'
 
 const modalSizeMap = {
   xs: rem(300),
@@ -67,9 +69,25 @@ export const mantineTheme = createTheme({
         bd: 'none',
       },
     }),
-    InputWrapper: InputWrapper.extend({
+    InputWrapper: Input.Wrapper.extend({
       defaultProps: {
         c: 'gray.7',
+        labelProps: {
+          style: {
+            lineHeight: '20px',
+            marginBottom: '6px',
+          },
+        },
+      },
+    }),
+    PasswordInput: PasswordInput.extend({
+      defaultProps: {
+        labelProps: {
+          style: {
+            lineHeight: '20px',
+            marginBottom: '6px',
+          },
+        },
       },
     }),
     Anchor: Anchor.extend({
