@@ -13,6 +13,6 @@ export type UsersSearch = z.infer<typeof usersSearchSchema>
 export function normalizeUsersSearch(search: UsersSearch) {
   return {
     page: search.page ?? DEFAULT_USERS_PAGE,
-    query: search.query || undefined,
+    query: search.query?.trim() && search.query.length > 0 ? search.query : undefined,
   }
 }
