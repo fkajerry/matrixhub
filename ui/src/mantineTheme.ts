@@ -15,7 +15,7 @@ const modalSizeMap = {
 } as const
 
 const isMappedModalSize = (size: unknown): size is keyof typeof modalSizeMap => (
-  typeof size === 'string' && size in modalSizeMap
+  typeof size === 'string' && Object.prototype.hasOwnProperty.call(modalSizeMap, size)
 )
 
 export const mantineTheme = createTheme({
