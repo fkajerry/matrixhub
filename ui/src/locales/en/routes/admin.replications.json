@@ -1,0 +1,36 @@
+{
+  "title": "Remote Sync",
+  "searchPlaceholder": "Search by name",
+  "toolbar": {
+    "create": "Create Sync Rule"
+  },
+  "table": {
+    "name": "Name",
+    "status": "Status",
+    "source": "Source Registry",
+    "syncMode": "Sync Mode",
+    "target": "Target: Project Name",
+    "triggerType": "Trigger Mode",
+    "bandwidth": "Bandwidth",
+    "actions": "Actions",
+    "empty": "No sync rules found"
+  },
+  "status": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "trigger": {
+    "manual": "Manual",
+    "scheduled": "Scheduled"
+  },
+  "bandwidth": {
+    "unlimited": "Unlimited"
+  },
+  "actions": {
+    "edit": "Edit",
+    "sync": "Sync",
+    "enable": "Enable",
+    "disable": "Disable",
+    "delete": "Delete"
+  }
+}

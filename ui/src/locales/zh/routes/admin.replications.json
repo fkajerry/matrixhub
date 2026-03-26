@@ -1,0 +1,36 @@
+{
+  "title": "远程同步",
+  "searchPlaceholder": "请输入名称搜索",
+  "toolbar": {
+    "create": "创建同步规则"
+  },
+  "table": {
+    "name": "名称",
+    "status": "状态",
+    "source": "源仓库",
+    "syncMode": "同步模式",
+    "target": "目标仓库：项目名称",
+    "triggerType": "触发模式",
+    "bandwidth": "带宽",
+    "actions": "操作",
+    "empty": "暂无同步规则数据"
+  },
+  "status": {
+    "enabled": "启用",
+    "disabled": "禁用"
+  },
+  "trigger": {
+    "manual": "手动",
+    "scheduled": "定时"
+  },
+  "bandwidth": {
+    "unlimited": "无限制"
+  },
+  "actions": {
+    "edit": "编辑",
+    "sync": "同步",
+    "enable": "启用",
+    "disable": "禁用",
+    "delete": "删除"
+  }
+}
