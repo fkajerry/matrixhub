@@ -587,6 +587,17 @@ func (m *GetDatasetRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _GetDatasetRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetDatasetRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := GetDatasetRequestValidationError{
 			field:  "Name",
@@ -678,6 +689,13 @@ var _ interface {
 	ErrorName() string
 } = GetDatasetRequestValidationError{}
 
+var _GetDatasetRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
+
 // Validate checks the field values on CreateDatasetRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -704,6 +722,17 @@ func (m *CreateDatasetRequest) validate(all bool) error {
 		err := CreateDatasetRequestValidationError{
 			field:  "Project",
 			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := _CreateDatasetRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := CreateDatasetRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
 		}
 		if !all {
 			return err
@@ -801,6 +830,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateDatasetRequestValidationError{}
+
+var _CreateDatasetRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on CreateDatasetResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -937,6 +973,17 @@ func (m *DeleteDatasetRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _DeleteDatasetRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := DeleteDatasetRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := DeleteDatasetRequestValidationError{
 			field:  "Name",
@@ -1027,6 +1074,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteDatasetRequestValidationError{}
+
+var _DeleteDatasetRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on DeleteDatasetResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1163,6 +1217,17 @@ func (m *ListDatasetRevisionsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _ListDatasetRevisionsRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := ListDatasetRevisionsRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := ListDatasetRevisionsRequestValidationError{
 			field:  "Name",
@@ -1254,6 +1319,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListDatasetRevisionsRequestValidationError{}
+
+var _ListDatasetRevisionsRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on ListDatasetRevisionsResponse with the
 // rules defined in the proto definition for this message. If any rules are
@@ -1420,6 +1492,17 @@ func (m *ListDatasetCommitsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _ListDatasetCommitsRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := ListDatasetCommitsRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := ListDatasetCommitsRequestValidationError{
 			field:  "Name",
@@ -1518,6 +1601,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListDatasetCommitsRequestValidationError{}
+
+var _ListDatasetCommitsRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on ListDatasetCommitsResponse with the
 // rules defined in the proto definition for this message. If any rules are
@@ -1717,6 +1807,17 @@ func (m *GetDatasetCommitRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _GetDatasetCommitRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetDatasetCommitRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := GetDatasetCommitRequestValidationError{
 			field:  "Name",
@@ -1819,6 +1920,13 @@ var _ interface {
 	ErrorName() string
 } = GetDatasetCommitRequestValidationError{}
 
+var _GetDatasetCommitRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
+
 // Validate checks the field values on GetDatasetTreeRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1845,6 +1953,17 @@ func (m *GetDatasetTreeRequest) validate(all bool) error {
 		err := GetDatasetTreeRequestValidationError{
 			field:  "Project",
 			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := _GetDatasetTreeRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetDatasetTreeRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
 		}
 		if !all {
 			return err
@@ -1946,6 +2065,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetDatasetTreeRequestValidationError{}
+
+var _GetDatasetTreeRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on GetDatasetTreeResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -2116,6 +2242,17 @@ func (m *GetDatasetBlobRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _GetDatasetBlobRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetDatasetBlobRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := GetDatasetBlobRequestValidationError{
 			field:  "Name",
@@ -2210,6 +2347,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetDatasetBlobRequestValidationError{}
+
+var _GetDatasetBlobRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on Dataset with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
