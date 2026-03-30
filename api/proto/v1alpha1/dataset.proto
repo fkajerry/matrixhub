@@ -87,26 +87,26 @@ message ListDatasetsResponse {
 
 message GetDatasetRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
 }
 
 message CreateDatasetRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
 }
 
 message CreateDatasetResponse {}
 
 message DeleteDatasetRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
 }
 
 message DeleteDatasetResponse {}
 
 message ListDatasetRevisionsRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
 }
 
 message ListDatasetRevisionsResponse {
@@ -115,7 +115,7 @@ message ListDatasetRevisionsResponse {
 
 message ListDatasetCommitsRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string revision = 3;
   // If true, include diff information for each commit.
   // Default is false to avoid returning large amounts of data.
@@ -131,13 +131,13 @@ message ListDatasetCommitsResponse {
 
 message GetDatasetCommitRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string id = 3 [(validate.rules).string.min_len = 1];
 }
 
 message GetDatasetTreeRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string revision = 3;
   string path = 4;
 }
@@ -148,7 +148,7 @@ message GetDatasetTreeResponse {
 
 message GetDatasetBlobRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string revision = 3;
   string path = 4;
 }

@@ -98,12 +98,12 @@ message ListModelsResponse {
 
 message GetModelRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
 }
 
 message CreateModelRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
 }
 
 message CreateModelResponse {
@@ -119,7 +119,7 @@ message DeleteModelResponse {
 
 message ListModelRevisionsRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
 }
 
 message ListModelRevisionsResponse {
@@ -133,7 +133,7 @@ message Revisions {
 
 message ListModelCommitsRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string revision = 3;
   // If true, include diff information for each commit.
   // Default is false to avoid returning large amounts of data.
@@ -149,13 +149,13 @@ message ListModelCommitsResponse {
 
 message GetModelCommitRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string id = 3 [(validate.rules).string.min_len = 1];
 }
 
 message GetModelTreeRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string revision = 3;
   string path = 4;
 }
@@ -179,7 +179,7 @@ message GetModelTreeResponse {
 
 message GetModelBlobRequest {
   string project = 1 [(validate.rules).string.min_len = 1];
-  string name = 2 [(validate.rules).string.min_len = 1];
+  string name = 2 [(validate.rules).string = {min_len: 1, not_in: ["models", "datasets", "spaces", "resolve"]}];
   string revision = 3;
   string path = 4;
 }

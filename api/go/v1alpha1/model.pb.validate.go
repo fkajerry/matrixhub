@@ -826,6 +826,17 @@ func (m *GetModelRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _GetModelRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetModelRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := GetModelRequestValidationError{
 			field:  "Name",
@@ -915,6 +926,13 @@ var _ interface {
 	ErrorName() string
 } = GetModelRequestValidationError{}
 
+var _GetModelRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
+
 // Validate checks the field values on CreateModelRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -941,6 +959,17 @@ func (m *CreateModelRequest) validate(all bool) error {
 		err := CreateModelRequestValidationError{
 			field:  "Project",
 			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := _CreateModelRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := CreateModelRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
 		}
 		if !all {
 			return err
@@ -1038,6 +1067,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateModelRequestValidationError{}
+
+var _CreateModelRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on CreateModelResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1400,6 +1436,17 @@ func (m *ListModelRevisionsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _ListModelRevisionsRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := ListModelRevisionsRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := ListModelRevisionsRequestValidationError{
 			field:  "Name",
@@ -1490,6 +1537,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListModelRevisionsRequestValidationError{}
+
+var _ListModelRevisionsRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on ListModelRevisionsResponse with the
 // rules defined in the proto definition for this message. If any rules are
@@ -1822,6 +1876,17 @@ func (m *ListModelCommitsRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _ListModelCommitsRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := ListModelCommitsRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := ListModelCommitsRequestValidationError{
 			field:  "Name",
@@ -1920,6 +1985,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListModelCommitsRequestValidationError{}
+
+var _ListModelCommitsRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on ListModelCommitsResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -2119,6 +2191,17 @@ func (m *GetModelCommitRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _GetModelCommitRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetModelCommitRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := GetModelCommitRequestValidationError{
 			field:  "Name",
@@ -2221,6 +2304,13 @@ var _ interface {
 	ErrorName() string
 } = GetModelCommitRequestValidationError{}
 
+var _GetModelCommitRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
+
 // Validate checks the field values on GetModelTreeRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -2247,6 +2337,17 @@ func (m *GetModelTreeRequest) validate(all bool) error {
 		err := GetModelTreeRequestValidationError{
 			field:  "Project",
 			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := _GetModelTreeRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetModelTreeRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
 		}
 		if !all {
 			return err
@@ -2348,6 +2449,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetModelTreeRequestValidationError{}
+
+var _GetModelTreeRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on File with the rules defined in the proto
 // definition for this message. If any rules are violated, the first error
@@ -2659,6 +2767,17 @@ func (m *GetModelBlobRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _GetModelBlobRequest_Name_NotInLookup[m.GetName()]; ok {
+		err := GetModelBlobRequestValidationError{
+			field:  "Name",
+			reason: "value must not be in list [models datasets spaces resolve]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetName()) < 1 {
 		err := GetModelBlobRequestValidationError{
 			field:  "Name",
@@ -2753,6 +2872,13 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetModelBlobRequestValidationError{}
+
+var _GetModelBlobRequest_Name_NotInLookup = map[string]struct{}{
+	"models":   {},
+	"datasets": {},
+	"spaces":   {},
+	"resolve":  {},
+}
 
 // Validate checks the field values on Model with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
